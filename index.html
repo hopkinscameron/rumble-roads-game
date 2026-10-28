@@ -37,6 +37,10 @@
         }
       }
 
+      function ignoreForeignError(message, filename) {
+        return !filename && String(message).indexOf("Script error") == 0;
+      }
+
       var buildUrl = "Build";
       var config = {
         arguments: [],
@@ -48,7 +52,8 @@
         productName: "Rumble Roads",
         productVersion: "0.1.0",
         autoSyncPersistentDataPath: true,
-        showBanner: showBanner
+        showBanner: showBanner,
+        errorHandler: ignoreForeignError
       };
 
       var script = document.createElement("script");
