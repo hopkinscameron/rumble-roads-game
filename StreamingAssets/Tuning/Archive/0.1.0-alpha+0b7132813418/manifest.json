@@ -1,0 +1,4 @@
+{
+  "version": "0.1.0-alpha",
+  "description": "Version of the whole tuning set, in semver form (MAJOR.MINOR.PATCH with an optional -label such as -alpha, -beta or -rc.1). It stays at 0.x until release. Number tweaks need no bump: the loader adds a hash of rules.json, type-chart.json and units.json after a '+', so every change gets a distinct tuning version on its own. Bump this only to mark a milestone, such as a balance pass."
+}

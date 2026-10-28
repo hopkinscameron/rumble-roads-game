@@ -1,0 +1,368 @@
+{
+  "description": "Generated from the map scene every time it is saved (Rumble Roads map baker). Do not edit by hand: edit the scene markers and save. The board id is the map id plus a hash of this graph.",
+  "format": 1,
+  "map": "proving-ground",
+  "spaces": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30,
+    31,
+    32,
+    33,
+    34,
+    35,
+    36,
+    37,
+    38,
+    39
+  ],
+  "links": [
+    {
+      "from": 1,
+      "to": 2,
+      "crossover": false
+    },
+    {
+      "from": 2,
+      "to": 3,
+      "crossover": false
+    },
+    {
+      "from": 3,
+      "to": 4,
+      "crossover": false
+    },
+    {
+      "from": 4,
+      "to": 5,
+      "crossover": false
+    },
+    {
+      "from": 5,
+      "to": 6,
+      "crossover": false
+    },
+    {
+      "from": 6,
+      "to": 7,
+      "crossover": false
+    },
+    {
+      "from": 7,
+      "to": 8,
+      "crossover": false
+    },
+    {
+      "from": 8,
+      "to": 9,
+      "crossover": false
+    },
+    {
+      "from": 9,
+      "to": 10,
+      "crossover": false
+    },
+    {
+      "from": 10,
+      "to": 11,
+      "crossover": false
+    },
+    {
+      "from": 11,
+      "to": 12,
+      "crossover": false
+    },
+    {
+      "from": 12,
+      "to": 13,
+      "crossover": false
+    },
+    {
+      "from": 14,
+      "to": 15,
+      "crossover": false
+    },
+    {
+      "from": 15,
+      "to": 16,
+      "crossover": false
+    },
+    {
+      "from": 16,
+      "to": 17,
+      "crossover": false
+    },
+    {
+      "from": 17,
+      "to": 18,
+      "crossover": false
+    },
+    {
+      "from": 18,
+      "to": 19,
+      "crossover": false
+    },
+    {
+      "from": 19,
+      "to": 20,
+      "crossover": false
+    },
+    {
+      "from": 20,
+      "to": 21,
+      "crossover": false
+    },
+    {
+      "from": 21,
+      "to": 22,
+      "crossover": false
+    },
+    {
+      "from": 22,
+      "to": 23,
+      "crossover": false
+    },
+    {
+      "from": 23,
+      "to": 24,
+      "crossover": false
+    },
+    {
+      "from": 24,
+      "to": 25,
+      "crossover": false
+    },
+    {
+      "from": 25,
+      "to": 26,
+      "crossover": false
+    },
+    {
+      "from": 27,
+      "to": 28,
+      "crossover": false
+    },
+    {
+      "from": 28,
+      "to": 29,
+      "crossover": false
+    },
+    {
+      "from": 29,
+      "to": 30,
+      "crossover": false
+    },
+    {
+      "from": 30,
+      "to": 31,
+      "crossover": false
+    },
+    {
+      "from": 31,
+      "to": 32,
+      "crossover": false
+    },
+    {
+      "from": 32,
+      "to": 33,
+      "crossover": false
+    },
+    {
+      "from": 33,
+      "to": 34,
+      "crossover": false
+    },
+    {
+      "from": 34,
+      "to": 35,
+      "crossover": false
+    },
+    {
+      "from": 35,
+      "to": 36,
+      "crossover": false
+    },
+    {
+      "from": 36,
+      "to": 37,
+      "crossover": false
+    },
+    {
+      "from": 37,
+      "to": 38,
+      "crossover": false
+    },
+    {
+      "from": 38,
+      "to": 39,
+      "crossover": false
+    },
+    {
+      "from": 7,
+      "to": 20,
+      "crossover": true
+    },
+    {
+      "from": 20,
+      "to": 33,
+      "crossover": true
+    }
+  ],
+  "pads": [
+    {
+      "id": 1,
+      "beside": 2,
+      "zone": "Home",
+      "owner": "One"
+    },
+    {
+      "id": 2,
+      "beside": 38,
+      "zone": "Home",
+      "owner": "Two"
+    },
+    {
+      "id": 3,
+      "beside": 4,
+      "zone": "Home",
+      "owner": "One"
+    },
+    {
+      "id": 4,
+      "beside": 36,
+      "zone": "Home",
+      "owner": "Two"
+    },
+    {
+      "id": 5,
+      "beside": 6,
+      "zone": "Contested"
+    },
+    {
+      "id": 6,
+      "beside": 34,
+      "zone": "Contested"
+    },
+    {
+      "id": 7,
+      "beside": 15,
+      "zone": "Home",
+      "owner": "One"
+    },
+    {
+      "id": 8,
+      "beside": 25,
+      "zone": "Home",
+      "owner": "Two"
+    },
+    {
+      "id": 9,
+      "beside": 17,
+      "zone": "Home",
+      "owner": "One"
+    },
+    {
+      "id": 10,
+      "beside": 23,
+      "zone": "Home",
+      "owner": "Two"
+    },
+    {
+      "id": 11,
+      "beside": 19,
+      "zone": "Contested"
+    },
+    {
+      "id": 12,
+      "beside": 21,
+      "zone": "Contested"
+    },
+    {
+      "id": 13,
+      "beside": 28,
+      "zone": "Home",
+      "owner": "One"
+    },
+    {
+      "id": 14,
+      "beside": 12,
+      "zone": "Home",
+      "owner": "Two"
+    },
+    {
+      "id": 15,
+      "beside": 30,
+      "zone": "Home",
+      "owner": "One"
+    },
+    {
+      "id": 16,
+      "beside": 10,
+      "zone": "Home",
+      "owner": "Two"
+    },
+    {
+      "id": 17,
+      "beside": 32,
+      "zone": "Contested"
+    },
+    {
+      "id": 18,
+      "beside": 8,
+      "zone": "Contested"
+    }
+  ],
+  "entries": [
+    {
+      "owner": "One",
+      "space": 1
+    },
+    {
+      "owner": "One",
+      "space": 14
+    },
+    {
+      "owner": "One",
+      "space": 27
+    },
+    {
+      "owner": "Two",
+      "space": 13
+    },
+    {
+      "owner": "Two",
+      "space": 26
+    },
+    {
+      "owner": "Two",
+      "space": 39
+    }
+  ]
+}

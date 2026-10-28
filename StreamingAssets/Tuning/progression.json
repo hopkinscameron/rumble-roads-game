@@ -1,0 +1,241 @@
+{
+  "description": "Progression values (requirements §4.2-4.7). Not part of the tuning version hash (D140): every ledger entry keeps what it granted or cost, so changing these never changes an existing account or replay. Epic 13 started the file with what opens an account, Epic 15 added XP, levels and gold, Epics 17-18 the Armory's unlocks and upgrade prices, and Epic 19 the rating; the reset arrives with Epic 18.",
+  "xp": {
+    "description": "XP paid for a finished match (requirements §4.3, D175, D176). Each line below is one line of the post-match breakdown; a line worth 0 is left out. XP never goes down.",
+    "earningModes": {
+      "description": "Match modes that earn XP (requirements §4.2). Names from MatchMode: Ladder, Practice, Playground, Tutorial, LocalMultiplayer, Sandbox. Online joins when it exists (M4).",
+      "modes": [
+        "Ladder"
+      ]
+    },
+    "minimumRound": {
+      "value": 3,
+      "description": "Round a match must reach for anyone to earn (D176). A match that ends earlier, by a forfeit or otherwise, earns nothing for either player, so quick forfeits can't be farmed."
+    },
+    "played": {
+      "value": 60,
+      "description": "Paid for every finished match that earns, whatever the result. Not paid to a player who forfeits."
+    },
+    "win": {
+      "value": 90,
+      "description": "Added for a win. A win by the opponent's forfeit counts in full."
+    },
+    "draw": {
+      "value": 45,
+      "description": "Added for a draw."
+    },
+    "decisiveMost": {
+      "value": 30,
+      "description": "Most added for a decisive win: this times (the winner's base health share minus the loser's), rounded down (D175). A destroyed base counts as 0%, so winning untouched against a destroyed base pays all of it."
+    },
+    "underdogMost": {
+      "value": 30,
+      "description": "Most added for an underdog win: this times (0.5 minus the winner's expected score) / 0.5, rounded down (D175). Nothing when the winner was expected to score 0.5 or more. Draws get no underdog line."
+    },
+    "castleDamageMost": {
+      "value": 10,
+      "description": "Performance, any result: most paid for damage to the enemy base, as this times the share of its maximum health it lost by the end, rounded down (D175)."
+    },
+    "perDown": {
+      "value": 2,
+      "description": "Performance, any result: paid for each enemy character the player's units downed (MatchDetails downs)."
+    },
+    "downsMost": {
+      "value": 10,
+      "description": "Performance: most paid for downs in one match. Castle damage and downs together are one Performance line, up to castleDamageMost + downsMost."
+    }
+  },
+  "rating": {
+    "description": "Elo rating for Ladder matches (requirements §4.7, D183). Each credited match changes the rating by K x (score - expected score), rounded to the nearest whole number (halves away from zero) and kept in the match entry. Score: win 1, draw 0.5, loss or forfeit 0. The rating has no floor. Accounts start at account.startingRating.",
+    "spread": {
+      "value": 400,
+      "description": "Elo spread for the expected score: 1 / (1 + 10 ^ ((opponent rating - own rating) / spread)). The underdog XP line uses the same expected score (D175)."
+    },
+    "earlyK": {
+      "value": 32,
+      "description": "K for the account's first earlyMatches credited matches, so a new rating settles quickly."
+    },
+    "laterK": {
+      "value": 24,
+      "description": "K after that."
+    },
+    "earlyMatches": {
+      "value": 20,
+      "description": "How many credited matches use earlyK. Every credited match counts, including those that end before xp.minimumRound and Sandbox matches credited as Ladder (D183)."
+    }
+  },
+  "levels": {
+    "description": "Player level curve (requirements §4.4, D132). XP to go from level n to n + 1 = firstStepXp + stepIncreaseXp x (n - 1): 150 for level 2, 1,110 for level 50, 30,870 XP in all. XP past the top level still counts; the level stays at the top.",
+    "topLevel": {
+      "value": 50,
+      "description": "Highest player level."
+    },
+    "firstStepXp": {
+      "value": 150,
+      "description": "XP to go from level 1 to level 2."
+    },
+    "stepIncreaseXp": {
+      "value": 20,
+      "description": "How much more XP each level after that takes than the one before."
+    }
+  },
+  "gold": {
+    "description": "Gold paid by levelling (requirements §4.6, D134). Each level-up pays a share of the XP that level took, plus a bonus at milestone levels; about 26,680 gold to level 50 with the tutorial.",
+    "levelUpShareOfXp": {
+      "description": "Share of a level's XP paid as gold when it is reached, as numerator / denominator, rounded to the nearest whole number: 2 / 3 gives 100 for level 2 and 740 for level 50.",
+      "numerator": 2,
+      "denominator": 3
+    },
+    "milestones": {
+      "description": "Levels that pay a bonus on top of the level-up gold.",
+      "levels": [
+        10,
+        20,
+        30,
+        40,
+        50
+      ],
+      "gold": 1200
+    },
+    "tutorialGold": {
+      "value": 100,
+      "description": "Gold paid once for finishing the tutorial (requirements §4.8): enough for the Ice character at level 2. Paid by the tutorial (Epic 21) as a reward entry."
+    }
+  },
+  "account": {
+    "description": "What a new account starts with. Written into the account's first ledger entry when it is created (D163), so later changes only reach new accounts.",
+    "startingRating": {
+      "value": 1000,
+      "description": "Elo rating a new account starts at (requirements §4.7)."
+    },
+    "testData": {
+      "value": true,
+      "description": "Marks every account this build opens or loads as test data (requirements §4.2, D126). M2 has no server, so nothing earned in it is carried into M3 accounts. Once marked, an account stays marked; turning this off only spares accounts that were never marked."
+    },
+    "starterItems": {
+      "description": "Unit ids a new account owns from the start: Fire, Earth and Healer, each as a character, a tower and a base (D133). Every id must be in units.json.",
+      "items": [
+        "character.fire",
+        "character.earth",
+        "character.healer",
+        "tower.fire",
+        "tower.earth",
+        "tower.healer",
+        "base.fire",
+        "base.earth",
+        "base.healer"
+      ]
+    }
+  },
+  "armory": {
+    "description": "What the Armory sells (requirements §4.5-4.7, D180). The starter items (account.starterItems) are owned from the start; every other unit in units.json is in exactly one chapter, opens for purchase at its level and is bought once, for good. Buying is optional. Each purchase's ledger entry keeps the price paid, so changing prices never changes an account.",
+    "chapters": {
+      "description": "The five chapters in order (requirements §4.5). Each introduces one idea; title and idea are shown in the Armory. unitPrice is what a character or tower costs, basePrice what a base costs (requirements §4.6). Each unlock is a unit id and the player level it opens at.",
+      "list": [
+        {
+          "title": "Control",
+          "idea": "Freezing, and the first triangle: Fire beats Ice, Ice beats Water, Water beats Fire.",
+          "unitPrice": 100,
+          "basePrice": 150,
+          "unlocks": [
+            { "item": "character.ice", "level": 2 },
+            { "item": "character.water", "level": 3 },
+            { "item": "tower.ice", "level": 6 },
+            { "item": "base.ice", "level": 8 }
+          ]
+        },
+        {
+          "title": "Attrition",
+          "idea": "Damage over time, and its answer.",
+          "unitPrice": 150,
+          "basePrice": 225,
+          "unlocks": [
+            { "item": "character.poison", "level": 12 },
+            { "item": "character.cleanser", "level": 13 },
+            { "item": "tower.water", "level": 16 },
+            { "item": "base.poison", "level": 18 }
+          ]
+        },
+        {
+          "title": "Fortress",
+          "idea": "Reflection and repair.",
+          "unitPrice": 200,
+          "basePrice": 300,
+          "unlocks": [
+            { "item": "character.metal", "level": 21 },
+            { "item": "character.engineer", "level": 23 },
+            { "item": "tower.metal", "level": 26 },
+            { "item": "tower.engineer", "level": 27 },
+            { "item": "base.metal", "level": 30 }
+          ]
+        },
+        {
+          "title": "Tempo",
+          "idea": "Roll manipulation.",
+          "unitPrice": 250,
+          "basePrice": 375,
+          "unlocks": [
+            { "item": "character.booster", "level": 34 },
+            { "item": "tower.poison", "level": 36 },
+            { "item": "tower.booster", "level": 39 },
+            { "item": "base.booster", "level": 41 }
+          ]
+        },
+        {
+          "title": "Mastery",
+          "idea": "Completing the set. The Engineer base's AP discount, the strongest base boost, is the max-level reward.",
+          "unitPrice": 300,
+          "basePrice": 450,
+          "unlocks": [
+            { "item": "tower.cleanser", "level": 44 },
+            { "item": "base.water", "level": 46 },
+            { "item": "base.cleanser", "level": 48 },
+            { "item": "base.engineer", "level": 50 }
+          ]
+        }
+      ]
+    },
+    "upgradePrices": {
+      "description": "Gold for each upgrade step (requirements §4.6): one price per level from 2 to upgrades.json's maxLevel, in order. 100 + 200 + 300 + 400 = 1,000 to fully upgrade one item. Copies of an item share its level.",
+      "prices": [
+        { "level": 2, "gold": 100 },
+        { "level": 3, "gold": 200 },
+        { "level": 4, "gold": 300 },
+        { "level": 5, "gold": 400 }
+      ]
+    },
+    "reset": {
+      "description": "Resetting upgrades (requirements §4.7, D138, D191): from opensAtLevel the player can put every unit back to level 1 and get refundPercent of the gold spent on upgrades since the last reset back, rounded down. Unlocks are never reset. The reset's ledger entry keeps the refund it paid, so changing these values never changes an account.",
+      "opensAtLevel": { "value": 15, "description": "Player level from which upgrades can be reset (after chapter 2)." },
+      "refundPercent": { "value": 80, "description": "Share of the upgrade gold spent since the last reset that a reset gives back, in percent, rounded down." }
+    }
+  },
+  "pace": {
+    "description": "How long a Ladder match takes a person, for the CPU Match Report's hours-to-level estimate only (Epic 22, D214); nothing in a match reads it. CPU-vs-CPU matches run far faster than people play, so the report counts rounds and turns them into minutes with these assumptions. Replace them with real Ladder match times from playtests (requirements §10 Q13).",
+    "setupSeconds": { "value": 180, "description": "Seconds before the first battle turn: picking a base, the coin toss, placing towers, picking characters and the reveal (the draft timers allow up to 30 s, 30 s per tower and 60 s)." },
+    "secondsPerRound": { "value": 50, "description": "Seconds per battle round: about 30 s for the player's turn (three AP of choosing, rolling and watching the strikes, under the 60 s decision timer) and about 20 s for the CPU's turn (its think pauses and the same animations)." }
+  },
+  "tutorial": {
+    "description": "The tutorial's Final Match (requirements §4.8, Epic 21). Finishing it pays gold.tutorialGold once, while connected; a forfeit doesn't count as finishing. Each reward is a ledger entry that keeps its gold, so changing these never changes an account.",
+    "firstWinBonusGold": { "value": 50, "description": "Extra gold, paid once, when the first Final Match the player finishes is a win." },
+    "grade": {
+      "description": "The Final Match's letter grade: each line scores up to its points, and the total picks the letter. The lines are shown in this order on the grade report.",
+      "win": { "value": 40, "description": "Points for winning the match." },
+      "draw": { "value": 20, "description": "Points for a draw (a loss scores 0)." },
+      "castleDamage": { "value": 20, "description": "Points for the share of the enemy castle's health taken away (all of them for breaking it)." },
+      "castleKept": { "value": 15, "description": "Points for the share of your own castle's health left at the end." },
+      "army": { "value": 15, "description": "Points for the share of your characters still standing at the end (downed and lost ones count against it)." },
+      "downs": { "value": 10, "description": "Points for downing enemy characters: the share of the enemy's characters you downed, counting each down (a revived one can be downed again), at most all of them." },
+      "letters": {
+        "description": "Letters from best to worst, each with the lowest total that earns it. One must start at 0.",
+        "grades": [
+          { "letter": "S", "minimumScore": 90 },
+          { "letter": "A", "minimumScore": 75 },
+          { "letter": "B", "minimumScore": 60 },
+          { "letter": "C", "minimumScore": 40 },
+          { "letter": "D", "minimumScore": 0 }
+        ]
+      }
+    }
+  }
+}

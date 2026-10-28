@@ -1,0 +1,193 @@
+{
+  "description": "CPU opponent tuning (Epic 9): how the CPU scores battle actions, how it drafts, the five strength bands (Rookie to Champion) and the Ladder opponent. The CPU's choices are recorded as ordinary commands, so this file is not part of the tuning version hash; changing it never breaks a replay. Scores are in points, where 1 point is worth 1 deploy-cost point of a healthy unit. Values marked 'hundredths' are hundredths of a point; 'percent' values are percents.",
+  "scoring": {
+    "description": "Battle scoring. The CPU values a board for itself (its own holdings minus the enemy's, plus the damage it threatens minus the damage it faces), simulates each legal action on a copy of the match for every die face, and takes the action with the best average gain minus its AP cost.",
+    "winValue": { "value": 1000, "description": "Points for a won match (minus for a lost one, 0 for a draw). Large, so a winning hit always beats everything else." },
+    "baseHealthPerPercent": { "value": 100, "description": "Hundredths of a point per 1% of a base's max HP, so a full base is worth 100 points." },
+    "materialPercent": { "value": 100, "description": "Percent of a unit's deploy cost it is worth at full health." },
+    "woundedFloorPercent": { "value": 50, "description": "Percent of its worth a unit keeps at 1 HP or durability; the rest scales with health." },
+    "downedPercent": { "value": 25, "description": "Percent of its worth a downed character keeps, because it can still be revived." },
+    "brokenPercent": { "value": 20, "description": "Percent of its worth a broken tower keeps, because it can still be repaired once." },
+    "pressurePercent": { "value": 40, "description": "Percent of the damage the CPU threatens next turn (its best target for each unit, up to its AP per turn) counted in its favour." },
+    "dangerPercent": { "value": 50, "description": "Percent of the damage the enemy threatens on its next turn counted against the CPU. Higher than pressure because the enemy moves next." },
+    "advancePerSpace": { "value": 80, "description": "Hundredths of a point for each space a character has advanced from the far end of the board towards the enemy base." },
+    "supportAdvancePercent": { "value": 60, "description": "Percent of the advance value support characters get, so they follow the front line a little behind." },
+    "inBasePenalty": { "value": 300, "description": "Hundredths of a point lost for each character still waiting in its base." },
+    "chillPenalty": { "value": 300, "description": "Hundredths of a point lost for a Chilled unit, which can't act during its owner's next turn (D115)." },
+    "boostPerTier": { "value": 100, "description": "Hundredths of a point for each Boost tier a unit holds. When the unit rolls, the boost is spent, not lost: the turn planner adds this back, so a boosted unit acts as freely as any other (D120)." },
+    "poisonPerTurn": { "value": 150, "description": "Hundredths of a point lost for each Poison turn left on a unit." },
+    "burnPerTurn": { "value": 100, "description": "Hundredths of a point lost for each Burn turn left on a unit (D116)." },
+    "rescuePercent": { "value": 30, "description": "Percent of what a revive would recover (full worth minus downed worth, scaled by the revive window left) counted while one of the player's Healer characters stands within revive reach of a downed ally, so the CPU walks a Healer over and then revives." },
+    "actionPointCost": { "value": 20, "description": "Hundredths of a point charged for each AP an action spends, so a cheap action wins a tie. Kept small because AP left at the end of a turn is lost anyway (D120)." },
+    "endTurnThreshold": { "value": 10, "description": "Hundredths of a point an action must score above before the CPU takes it instead of ending its turn (D120: low, so a little chip damage or a small advance is still worth the AP)." }
+  },
+  "draft": {
+    "description": "How every CPU drafts (D111). There are no presets: the base is drawn at random (both bases are secret), a game plan sets how much of the budget goes on towers, and each tower and character is scored on what has been revealed (both bases and the towers placed so far), a forecast of the enemy's hidden characters, value for money, the CPU's own base, the roles its roster still lacks and how well the rest of the budget can be spent. The difficulty decides how far down the ranking a pick may reach and how much the CPU reads the enemy.",
+    "counterPercent": { "value": 100, "description": "Weight of type advantage against revealed enemy units: for each one, how much more this type deals (chart multiplier - 1) plus how much less it takes from that unit (1 - chart multiplier), times this percent." },
+    "baseCounterPercent": { "value": 200, "description": "Percent weight of the enemy base in that sum (100 = same as one tower). A base never attacks, so only the damage this type deals to it counts." },
+    "forecastPercent": { "value": 300, "description": "Weight of type advantage against the enemy's likely characters, which are hidden until the battle. 100 = the forecast counts like one revealed unit; 300 = like three." },
+    "forecastBasePercent": { "value": 200, "description": "Forecast: every character type starts at odds of 1; the enemy base's type adds this many hundredths (characters that share the base type get its bonus, so they are likelier)." },
+    "forecastTowerPercent": { "value": 100, "description": "Forecast: each enemy tower adds this many hundredths to the odds of characters of its type." },
+    "matchingTypePercent": { "value": 50, "description": "Hundredths of a point for a unit that shares the CPU's base type (it gets the matching-type bonus)." },
+    "duplicatePenaltyPercent": { "value": 60, "description": "Hundredths of a point taken off for each copy of the same unit already chosen, to keep the roster varied." },
+    "valuePercent": { "value": 100, "description": "Value for money: a unit's power (see power) per deploy point, compared with the average of its kind. Hundredths of a point for each 100% above the average (minus below it)." },
+    "missingRolePercent": { "value": 250, "description": "Hundredths of a point for a character whose role (see roles) the roster has fewer of than it wants." },
+    "extraRolePenaltyPercent": { "value": 60, "description": "Hundredths of a point taken off for each character of a role beyond what the roster wants, counting this one." },
+    "wastePenaltyPercent": { "value": 10, "description": "Hundredths of a point taken off for each budget point a character pick would leave that no mix of characters can spend." },
+    "minimumCharacters": { "value": 3, "description": "Towers never take so much budget that fewer than this many of the cheapest character are left affordable." },
+    "padHomePercent": { "value": 50, "description": "Pad choice: each space in range counts 1, plus this many hundredths if the space is nearer the CPU's base than the enemy's." },
+    "padSpreadPenaltyPercent": { "value": 150, "description": "Pad choice: hundredths of a point taken off for each of the CPU's towers already near the pad, to spread towers across the lanes." },
+    "padSpreadDistance": { "value": 2, "description": "Pad choice: towers whose spaces are this many spaces apart or closer count as near each other." },
+    "power": {
+      "description": "A unit's power for value for money: attack x (1 + range x rangePercent / 100) x attackPercent / 100, plus defense x defensePercent / 100, plus effective health (max health x 100 / damage-taken percent) x healthPercent / 100.",
+      "attackPercent": { "value": 100, "description": "Percent of attack (heal or repair strength for support units) counted." },
+      "rangePercent": { "value": 25, "description": "Percent added to the attack part for each space of range." },
+      "defensePercent": { "value": 50, "description": "Percent of defense counted." },
+      "healthPercent": { "value": 25, "description": "Percent of effective health counted." }
+    },
+    "plans": [
+      { "id": "rush", "description": "Few or no towers, as many characters as possible.", "weight": 25, "minTowerPercent": 0, "maxTowerPercent": 20 },
+      { "id": "balanced", "description": "About two towers and the rest on characters.", "weight": 50, "minTowerPercent": 25, "maxTowerPercent": 40 },
+      { "id": "fortress", "description": "Three or four towers and a smaller roster.", "weight": 25, "minTowerPercent": 45, "maxTowerPercent": 60 }
+    ],
+    "roles": {
+      "description": "Each character's role and how many of each a roster wants. A pick that fills a missing role scores higher (missingRolePercent); more of a role than wanted scores lower (extraRolePenaltyPercent).",
+      "Frontline": { "description": "Tough characters that hold a lane.", "wanted": 1, "units": [ "character.earth", "character.metal" ] },
+      "Striker": { "description": "Hard hitters at short range.", "wanted": 1, "units": [ "character.fire", "character.water" ] },
+      "Ranged": { "description": "Status attackers that reach two spaces.", "wanted": 1, "units": [ "character.ice", "character.poison" ] },
+      "Healer": { "description": "The only character that can revive, so a roster wants one.", "wanted": 1, "units": [ "character.healer" ] },
+      "Support": { "description": "Repairers, boosters and cleansers.", "wanted": 1, "units": [ "character.engineer", "character.booster", "character.cleanser" ] }
+    }
+  },
+  "profiles": {
+    "description": "One profile per CPU strength band, weakest first (Story 19.2.1, D193). Practice picks one by name; the Ladder picks one from the player's rating (see ladder). Each draws its game plan and base at random at the start of the match (both bases are secret, so no CPU can counter the human's base choice).",
+    "Rookie": {
+      "description": "Rookie (was Easy, made sloppier in the M2 close-out): slips on more than half its decisions into a clearly worse action, drafts very loosely and never reads the enemy, so it stays the weakest band even when the level offsets clamp at level 1 or 5.",
+      "mistakePercent": { "value": 60, "description": "Percent chance each battle decision is a slip: a random pick among the near-best actions instead of the best." },
+      "nearBestPercent": { "value": 25, "description": "An action is near-best if it scores at least this percent of the best score. Ending the turn is never a slip." },
+      "draftChoices": { "value": 8, "description": "Each draft pick is drawn from this many of the best-scored units." },
+      "draftFalloffPercent": { "value": 90, "description": "Each lower-ranked choice is this percent as likely as the one above it (0 = always the best)." },
+      "readsEnemyPercent": { "value": 0, "description": "Percent of the type-advantage and forecast scores the draft uses: how well it counter-drafts the revealed bases and towers." },
+      "thinkMilliseconds": { "value": 900, "description": "Pause before each decision, so a human can follow the CPU's turn." },
+      "actionMilliseconds": { "value": 600, "description": "Pause between the steps of one action on screen (select, aim, pick)." },
+      "forfeitAfterPasses": { "value": 3, "description": "The CPU forfeits instead of ending a turn when it would be its this-many-th turn in a row without taking any action, and only while it would lose on the tiebreakers (D120)." },
+      "lookahead": {
+        "description": "No lookahead: each action is scored on its own.",
+        "width": { "value": 0, "description": "How many of the best-scored actions also get their follow-up scored (0 = no lookahead)." },
+        "percent": { "value": 0, "description": "Percent of the best follow-up's gain over ending the turn added to an action's score." },
+        "faces": { "description": "Die faces the lookahead tries for the action and its follow-ups (a few typical faces instead of all six, to keep a decision quick).", "list": [ 2, 4, 6 ] }
+      }
+    },
+    "Contender": {
+      "description": "Contender: slips now and then, drafts fairly well and reads the enemy partly.",
+      "mistakePercent": { "value": 15, "description": "Percent chance each battle decision is a slip: a random pick among the near-best actions instead of the best." },
+      "nearBestPercent": { "value": 75, "description": "An action is near-best if it scores at least this percent of the best score. Ending the turn is never a slip." },
+      "draftChoices": { "value": 4, "description": "Each draft pick is drawn from this many of the best-scored units." },
+      "draftFalloffPercent": { "value": 55, "description": "Each lower-ranked choice is this percent as likely as the one above it (0 = always the best)." },
+      "readsEnemyPercent": { "value": 65, "description": "Percent of the type-advantage and forecast scores the draft uses: how well it counter-drafts the revealed bases and towers." },
+      "thinkMilliseconds": { "value": 800, "description": "Pause before each decision, so a human can follow the CPU's turn." },
+      "actionMilliseconds": { "value": 550, "description": "Pause between the steps of one action on screen (select, aim, pick)." },
+      "forfeitAfterPasses": { "value": 3, "description": "The CPU forfeits instead of ending a turn when it would be its this-many-th turn in a row without taking any action, and only while it would lose on the tiebreakers (D120)." },
+      "lookahead": {
+        "description": "No lookahead: each action is scored on its own.",
+        "width": { "value": 0, "description": "How many of the best-scored actions also get their follow-up scored (0 = no lookahead)." },
+        "percent": { "value": 0, "description": "Percent of the best follow-up's gain over ending the turn added to an action's score." },
+        "faces": { "description": "Die faces the lookahead tries for the action and its follow-ups.", "list": [ 2, 4, 6 ] }
+      }
+    },
+    "Veteran": {
+      "description": "Veteran (was Normal): always takes its best-scored action, drafts tightly and reads the enemy fully.",
+      "mistakePercent": { "value": 0, "description": "Percent chance each battle decision is a slip. 0 = always the best-scored action." },
+      "nearBestPercent": { "value": 90, "description": "An action is near-best if it scores at least this percent of the best score (only used when slips can happen)." },
+      "draftChoices": { "value": 3, "description": "Each draft pick is drawn from this many of the best-scored units." },
+      "draftFalloffPercent": { "value": 35, "description": "Each lower-ranked choice is this percent as likely as the one above it (0 = always the best)." },
+      "readsEnemyPercent": { "value": 100, "description": "Percent of the type-advantage and forecast scores the draft uses: how well it counter-drafts the revealed bases and towers." },
+      "thinkMilliseconds": { "value": 700, "description": "Pause before each decision, so a human can follow the CPU's turn." },
+      "actionMilliseconds": { "value": 500, "description": "Pause between the steps of one action on screen (select, aim, pick)." },
+      "forfeitAfterPasses": { "value": 3, "description": "The CPU forfeits instead of ending a turn when it would be its this-many-th turn in a row without taking any action, and only while it would lose on the tiebreakers (D120)." },
+      "lookahead": {
+        "description": "No lookahead: each action is scored on its own.",
+        "width": { "value": 0, "description": "How many of the best-scored actions also get their follow-up scored (0 = no lookahead)." },
+        "percent": { "value": 0, "description": "Percent of the best follow-up's gain over ending the turn added to an action's score." },
+        "faces": { "description": "Die faces the lookahead tries for the action and its follow-ups.", "list": [ 2, 4, 6 ] }
+      }
+    },
+    "Elite": {
+      "description": "Elite: plays like Veteran and also looks one action ahead, so it orders its turn to set up combinations (boost an ally, then strike with it; free a frozen ally, then act with it; spend AP where the follow-up is best).",
+      "mistakePercent": { "value": 0, "description": "Percent chance each battle decision is a slip. 0 = always the best-scored action." },
+      "nearBestPercent": { "value": 90, "description": "An action is near-best if it scores at least this percent of the best score (only used when slips can happen)." },
+      "draftChoices": { "value": 3, "description": "Each draft pick is drawn from this many of the best-scored units." },
+      "draftFalloffPercent": { "value": 35, "description": "Each lower-ranked choice is this percent as likely as the one above it (0 = always the best)." },
+      "readsEnemyPercent": { "value": 100, "description": "Percent of the type-advantage and forecast scores the draft uses: how well it counter-drafts the revealed bases and towers." },
+      "thinkMilliseconds": { "value": 650, "description": "Pause before each decision, so a human can follow the CPU's turn (the lookahead's own thinking time comes on top)." },
+      "actionMilliseconds": { "value": 500, "description": "Pause between the steps of one action on screen (select, aim, pick)." },
+      "forfeitAfterPasses": { "value": 3, "description": "The CPU forfeits instead of ending a turn when it would be its this-many-th turn in a row without taking any action, and only while it would lose on the tiebreakers (D120)." },
+      "lookahead": {
+        "description": "Looks one action ahead for its best few actions (D194).",
+        "width": { "value": 3, "description": "How many of the best-scored actions also get their follow-up scored." },
+        "percent": { "value": 60, "description": "Percent of the best follow-up's gain over ending the turn added to an action's score." },
+        "faces": { "description": "Die faces the lookahead tries for the action and its follow-ups (a few typical faces instead of all six, to keep a decision quick).", "list": [ 2, 4, 6 ] }
+      }
+    },
+    "Champion": {
+      "description": "Champion: looks ahead from more of its best actions, weighs its follow-ups more and drafts the tightest.",
+      "mistakePercent": { "value": 0, "description": "Percent chance each battle decision is a slip. 0 = always the best-scored action." },
+      "nearBestPercent": { "value": 90, "description": "An action is near-best if it scores at least this percent of the best score (only used when slips can happen)." },
+      "draftChoices": { "value": 2, "description": "Each draft pick is drawn from this many of the best-scored units." },
+      "draftFalloffPercent": { "value": 20, "description": "Each lower-ranked choice is this percent as likely as the one above it (0 = always the best)." },
+      "readsEnemyPercent": { "value": 100, "description": "Percent of the type-advantage and forecast scores the draft uses: how well it counter-drafts the revealed bases and towers." },
+      "thinkMilliseconds": { "value": 600, "description": "Pause before each decision, so a human can follow the CPU's turn (the lookahead's own thinking time comes on top)." },
+      "actionMilliseconds": { "value": 500, "description": "Pause between the steps of one action on screen (select, aim, pick)." },
+      "forfeitAfterPasses": { "value": 3, "description": "The CPU forfeits instead of ending a turn when it would be its this-many-th turn in a row without taking any action, and only while it would lose on the tiebreakers (D120)." },
+      "lookahead": {
+        "description": "Looks one action ahead for more of its best actions (D194).",
+        "width": { "value": 4, "description": "How many of the best-scored actions also get their follow-up scored." },
+        "percent": { "value": 80, "description": "Percent of the best follow-up's gain over ending the turn added to an action's score." },
+        "faces": { "description": "Die faces the lookahead tries for the action and its follow-ups (a few typical faces instead of all six, to keep a decision quick).", "list": [ 2, 4, 6 ] }
+      }
+    }
+  },
+  "ladder": {
+    "description": "The Ladder's CPU opponent (Story 19.2.1, D193). The player's rating picks their band; each match the strength bag moves the CPU up or down a band, and the band sets the CPU profile, the fixed rating it plays at, its unit levels and how many of the player's next unlocks it may field. Its roster is the player's owned items plus those unlocks (D185). The CPU's rating is never shown to the player (D184).",
+    "bands": {
+      "description": "One band per CPU profile, from the lowest rating up. A player is in the highest band whose fromRating is at or below their rating; ratings below the second band's fromRating are in the first band.",
+      "Rookie": {
+        "description": "Rookie: below 860.",
+        "fromRating": { "value": 0, "description": "Lowest rating in this band (the first band also takes every rating below it)." },
+        "rating": { "value": 800, "description": "The rating this band's CPU plays at, for the player's expected score, the rating change and the underdog XP line (fixed, so the player's rating settles where they score what Elo expects against the CPUs they meet)." },
+        "levelOffset": { "value": -2, "description": "Added to each of the player's unit levels for the CPU's copy of that unit (never below 1 or above the top level). Previewed unlocks stay at level 1." },
+        "previewUnlocks": { "value": 0, "description": "How many of the player's next unlocks (items not owned yet, by opening level) the CPU may field at level 1." }
+      },
+      "Contender": {
+        "description": "Contender: 860 to 959.",
+        "fromRating": { "value": 860, "description": "Lowest rating in this band." },
+        "rating": { "value": 925, "description": "The rating this band's CPU plays at, for the player's expected score, the rating change and the underdog XP line (fixed, so the player's rating settles where they score what Elo expects against the CPUs they meet)." },
+        "levelOffset": { "value": -1, "description": "Added to each of the player's unit levels for the CPU's copy of that unit (never below 1 or above the top level). Previewed unlocks stay at level 1." },
+        "previewUnlocks": { "value": 1, "description": "How many of the player's next unlocks the CPU may field at level 1." }
+      },
+      "Veteran": {
+        "description": "Veteran: 960 to 1,039, where new accounts start (rating 1,000).",
+        "fromRating": { "value": 960, "description": "Lowest rating in this band." },
+        "rating": { "value": 1000, "description": "The rating this band's CPU plays at, for the player's expected score, the rating change and the underdog XP line (fixed, so the player's rating settles where they score what Elo expects against the CPUs they meet)." },
+        "levelOffset": { "value": 0, "description": "Added to each of the player's unit levels for the CPU's copy of that unit (never below 1 or above the top level). Previewed unlocks stay at level 1." },
+        "previewUnlocks": { "value": 1, "description": "How many of the player's next unlocks the CPU may field at level 1." }
+      },
+      "Elite": {
+        "description": "Elite: 1,040 to 1,139.",
+        "fromRating": { "value": 1040, "description": "Lowest rating in this band." },
+        "rating": { "value": 1075, "description": "The rating this band's CPU plays at, for the player's expected score, the rating change and the underdog XP line (fixed, so the player's rating settles where they score what Elo expects against the CPUs they meet)." },
+        "levelOffset": { "value": 1, "description": "Added to each of the player's unit levels for the CPU's copy of that unit (never below 1 or above the top level). Previewed unlocks stay at level 1." },
+        "previewUnlocks": { "value": 2, "description": "How many of the player's next unlocks the CPU may field at level 1." }
+      },
+      "Champion": {
+        "description": "Champion: 1,140 and up.",
+        "fromRating": { "value": 1140, "description": "Lowest rating in this band." },
+        "rating": { "value": 1200, "description": "The rating this band's CPU plays at, for the player's expected score, the rating change and the underdog XP line (fixed, so the player's rating settles where they score what Elo expects against the CPUs they meet)." },
+        "levelOffset": { "value": 2, "description": "Added to each of the player's unit levels for the CPU's copy of that unit (never below 1 or above the top level). Previewed unlocks stay at level 1." },
+        "previewUnlocks": { "value": 2, "description": "How many of the player's next unlocks the CPU may field at level 1." }
+      }
+    },
+    "strengthBag": { "description": "Band moves from the player's own band, one per credited Ladder match, shuffled for each run of matches (D143's streak guard: with -1, 0, 0, +1 the CPU is never from a lower, or a higher, band more than twice in a row). The draw follows the number of credited matches, so leaving a match early never redraws the opponent. A move past the first or last band stays in it.", "list": [ -1, 0, 0, 1 ] },
+    "previewCopies": { "value": 1, "description": "How many copies of each previewed unlock the CPU may draft, so it meets the player with a taste of what is coming instead of a whole roster of one new item (D188)." }
+  }
+}

@@ -1,0 +1,75 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+#unity-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  display: block;
+  background: #000;
+}
+
+#unity-loading {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  color: #fff;
+  font-family: system-ui, sans-serif;
+}
+
+#unity-title {
+  font-size: 32px;
+  font-weight: 800;
+  letter-spacing: 1px;
+}
+
+#unity-progress {
+  width: 60%;
+  max-width: 320px;
+  height: 12px;
+  border-radius: 6px;
+  background: #333;
+  overflow: hidden;
+}
+
+#unity-progress-fill {
+  width: 0;
+  height: 100%;
+  background: #f2b632;
+}
+
+#unity-warning {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: env(safe-area-inset-top);
+  font-family: system-ui, sans-serif;
+}
+
+.unity-note {
+  background: #f2d64b;
+  color: #000;
+  padding: 10px;
+}
+
+.unity-error {
+  background: #c62828;
+  color: #fff;
+  padding: 10px;
+}

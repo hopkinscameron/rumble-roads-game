@@ -1,0 +1,169 @@
+{
+  "description": "Types, roles and the type chart (requirements §3).",
+  "types": {
+    "description": "Every type and its role (§3.1). Role decides what a unit does; type decides who it is good against (D11).",
+    "Fire": {
+      "role": "Attacker",
+      "description": "Burst damage; strong against Ice, Metal and Engineer."
+    },
+    "Ice": {
+      "role": "Attacker",
+      "description": "Medium damage that applies Chill; strong against Poison, Water and Booster."
+    },
+    "Poison": {
+      "role": "Attacker",
+      "description": "Lower hit damage that applies Poisoned; strong against Earth, Metal and Healer."
+    },
+    "Earth": {
+      "role": "Defender",
+      "description": "Highest HP; the lane wall. Counters Poison."
+    },
+    "Water": {
+      "role": "Defender",
+      "description": "Sturdy. Counters Fire."
+    },
+    "Metal": {
+      "role": "Defender",
+      "description": "High defense. Counters Ice."
+    },
+    "Healer": {
+      "role": "Support",
+      "description": "Heals allies; the only type that can Revive."
+    },
+    "Engineer": {
+      "role": "Support",
+      "description": "Repairs towers, for more than other characters and from range."
+    },
+    "Booster": {
+      "role": "Support",
+      "description": "Raises an ally's next roll by one tier."
+    },
+    "Cleanser": {
+      "role": "Support",
+      "description": "Removes status effects and is immune to them."
+    }
+  },
+  "multipliers": {
+    "description": "Damage multiplier in percent for the attacking type (row) against the target's type (column), from the §3.3 type chart: 200 strong, 100 normal, 50 weak. Fire, Ice and Poison are weak against their own type (D114). Every cell must be present and above 0. Edit by hand or with Rumble Roads > Type Chart in the Editor.",
+    "Fire": {
+      "Fire": 50,
+      "Ice": 200,
+      "Poison": 100,
+      "Earth": 50,
+      "Water": 50,
+      "Metal": 200,
+      "Healer": 100,
+      "Engineer": 200,
+      "Booster": 100,
+      "Cleanser": 100
+    },
+    "Ice": {
+      "Fire": 50,
+      "Ice": 50,
+      "Poison": 200,
+      "Earth": 100,
+      "Water": 200,
+      "Metal": 50,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 200,
+      "Cleanser": 100
+    },
+    "Poison": {
+      "Fire": 100,
+      "Ice": 100,
+      "Poison": 50,
+      "Earth": 200,
+      "Water": 50,
+      "Metal": 200,
+      "Healer": 200,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 50
+    },
+    "Earth": {
+      "Fire": 100,
+      "Ice": 100,
+      "Poison": 200,
+      "Earth": 100,
+      "Water": 100,
+      "Metal": 100,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 100
+    },
+    "Water": {
+      "Fire": 200,
+      "Ice": 100,
+      "Poison": 100,
+      "Earth": 100,
+      "Water": 100,
+      "Metal": 100,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 100
+    },
+    "Metal": {
+      "Fire": 100,
+      "Ice": 200,
+      "Poison": 100,
+      "Earth": 100,
+      "Water": 100,
+      "Metal": 100,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 100
+    },
+    "Healer": {
+      "Fire": 100,
+      "Ice": 100,
+      "Poison": 100,
+      "Earth": 100,
+      "Water": 100,
+      "Metal": 100,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 100
+    },
+    "Engineer": {
+      "Fire": 100,
+      "Ice": 100,
+      "Poison": 100,
+      "Earth": 100,
+      "Water": 100,
+      "Metal": 100,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 100
+    },
+    "Booster": {
+      "Fire": 100,
+      "Ice": 100,
+      "Poison": 100,
+      "Earth": 100,
+      "Water": 100,
+      "Metal": 100,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 100
+    },
+    "Cleanser": {
+      "Fire": 100,
+      "Ice": 100,
+      "Poison": 100,
+      "Earth": 100,
+      "Water": 100,
+      "Metal": 100,
+      "Healer": 100,
+      "Engineer": 100,
+      "Booster": 100,
+      "Cleanser": 100
+    }
+  }
+}

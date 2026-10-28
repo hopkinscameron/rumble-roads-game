@@ -1,0 +1,310 @@
+{
+  "description": "Core match rules (requirements §2). Every value is a starting point for playtesting. Changing any value changes the tuning version, so replays recorded under the old values refuse to run.",
+  "startingBudget": {
+    "value": 130,
+    "description": "Points each player spends on towers and characters in a match (§2.2, D7). Bases are free."
+  },
+  "actionPointsPerTurn": {
+    "value": 3,
+    "description": "Action points (AP) a player gets at the start of each battle turn. Unspent AP is lost (§2.3, D5)."
+  },
+  "firstMoverOpeningActionPoints": {
+    "value": 1,
+    "description": "Action points the first mover gets on its opening turn (round 1) instead of actionPointsPerTurn, to offset the head start of moving first (D98). Every later turn, and the second mover's first turn, use actionPointsPerTurn."
+  },
+  "matchingTypeBonusPercent": {
+    "value": 10,
+    "description": "Percent added to the primary stat of every friendly character and tower that shares the base's type (§3.4)."
+  },
+  "actionCosts": {
+    "description": "AP cost of each battle action (§2.3). A unit can act at most once per turn.",
+    "Move": {
+      "value": 1,
+      "description": "Move a character up to the rolled number of spaces. Leaving the base is a normal Move (D24)."
+    },
+    "Attack": {
+      "value": 1,
+      "description": "Attack with a character, or fire a tower, at a target in range."
+    },
+    "Defend": {
+      "value": 1,
+      "description": "Raise defense by the roll multiplier until the owner's next turn."
+    },
+    "Heal": {
+      "value": 1,
+      "description": "Heal an ally in range (Healer units)."
+    },
+    "Boost": {
+      "value": 1,
+      "description": "Raise an ally's next roll by one tier (Booster units)."
+    },
+    "Cleanse": {
+      "value": 1,
+      "description": "Remove status effects from an ally in range (Cleanser units)."
+    },
+    "Repair": {
+      "value": 2,
+      "description": "Repair a friendly tower once per match: any character next to it, or an Engineer (character or tower) from range."
+    },
+    "Revive": {
+      "value": 2,
+      "description": "Bring back a downed ally next to a Healer, at a percentage of max HP set by the roll. 2 AP (D87); an Engineer base's discount can bring the first one each turn to 1."
+    }
+  },
+  "rollTiers": {
+    "description": "How a d6 roll maps to a multiplier for every action except Move, which uses the raw roll as max spaces (§2.4, D4). Tiers must cover 1-6 in order. The first tier must be 100 so a low roll gives base stats, and later tiers never go lower: rolls only amplify.",
+    "tiers": [
+      {
+        "name": "Base",
+        "minRoll": 1,
+        "maxRoll": 2,
+        "multiplierPercent": 100,
+        "description": "Rolls 1-2: base stats (1x)."
+      },
+      {
+        "name": "Strong",
+        "minRoll": 3,
+        "maxRoll": 4,
+        "multiplierPercent": 125,
+        "description": "Rolls 3-4: 1.25x."
+      },
+      {
+        "name": "Max",
+        "minRoll": 5,
+        "maxRoll": 6,
+        "multiplierPercent": 150,
+        "description": "Rolls 5-6: 1.5x."
+      },
+      {
+        "name": "Boosted",
+        "minRoll": 7,
+        "maxRoll": 7,
+        "multiplierPercent": 175,
+        "description": "Only Boost reaches this tier (D118): a Boosted 5-6 becomes 7, so a Boost is never wasted. 1.75x, and a Move of 7 spaces. Every per-tier table below needs an entry for it."
+      }
+    ]
+  },
+  "rollModifiers": {
+    "description": "How Boost changes the next roll of the unit it affects (§2.4). It is used up by that roll, whatever the action.",
+    "boostTiers": {
+      "value": 1,
+      "description": "A Boosted unit's next roll is raised by this many tiers, to the lowest face of the higher tier (Move: 1-2 becomes 3, 3-4 becomes 5, 5-6 becomes 7)."
+    }
+  },
+  "defendTiers": {
+    "description": "Defense multiplier for a unit that used Defend, one entry per roll tier in the same order as rollTiers (D44). Every entry is above 100 so even the lowest Defend roll helps. The unit's defense is multiplied by it until the start of its owner's next turn (§2.6).",
+    "tiers": [
+      {
+        "tier": "Base",
+        "multiplierPercent": 150,
+        "description": "Defend roll 1-2: defense x1.5."
+      },
+      {
+        "tier": "Strong",
+        "multiplierPercent": 175,
+        "description": "Defend roll 3-4: defense x1.75."
+      },
+      {
+        "tier": "Max",
+        "multiplierPercent": 200,
+        "description": "Defend roll 5-6: defense x2."
+      },
+      {
+        "tier": "Boosted",
+        "multiplierPercent": 225,
+        "description": "Boosted Defend past 6: defense x2.25."
+      }
+    ]
+  },
+  "attackerBaseBonusPercent": {
+    "value": 10,
+    "description": "Role bonus of an Attacker base (Fire, Ice, Poison): percent added to the attack of every friendly character and tower. Adds to the matching-type bonus, so a unit of the base's own type gets both (§3.4, D44)."
+  },
+  "reflection": {
+    "description": "Damage reflection (§3.2): when a unit of these types (character, tower or base) loses health to an attack, a share of the health it actually lost (measured before its own damageTakenPercent, so a tough Metal unit reflects as much as before D101) goes back to the attacker, at any range, through the attacker's damageTakenPercent. Defense and Defend don't reduce it, it can down or break the attacker, and it counts as damage dealt by the reflecting unit's owner. Reflected damage is never reflected again.",
+    "types": [ "Metal" ],
+    "percent": {
+      "value": 25,
+      "description": "Percent of the health the reflecting unit actually lost that goes back to the attacker, rounded half up."
+    },
+    "minimum": {
+      "value": 1,
+      "description": "Smallest reflected amount whenever the reflecting unit lost any health."
+    }
+  },
+  "statuses": {
+    "description": "Status effects (§2.6). Bases never get statuses, and a unit never gets the status its own type applies (an Ice unit is never Chilled, a Poison unit never Poisoned, a Fire unit never Burned; D114). A unit can carry several statuses at once.",
+    "minimumFace": {
+      "value": 4,
+      "description": "A Chill, Poison or Burn hit only applies its status when the attack's final face (after Boost) is at least this, for characters and towers alike (D100). 1 = every hit."
+    },
+    "chill": {
+      "description": "A hit from these types on a face of minimumFace or more Chills (freezes) the target: it can't take any action during its owner's next turn, then Chill wears off at the end of that turn (D115). A new hit while Chilled changes nothing.",
+      "appliedBy": [ "Ice" ]
+    },
+    "poison": {
+      "description": "A hit from these types on a face of minimumFace or more Poisons the target. A new hit restarts the count rather than stacking.",
+      "appliedBy": [ "Poison" ],
+      "damagePerTurn": {
+        "value": 12,
+        "description": "Damage a Poisoned unit takes at the start of each of its owner's turns, before its damageTakenPercent (12 on a 100 HP unit is the old 3 on 25, D101). Defense and Defend don't reduce it."
+      },
+      "turns": {
+        "value": 2,
+        "description": "How many of its owner's turns a Poisoned unit takes damage for."
+      }
+    },
+    "burn": {
+      "description": "A hit from these types on a face of minimumFace or more Burns the target (D116). A new hit restarts the count rather than stacking. Burn and Poison can both be on a unit and both tick.",
+      "appliedBy": [ "Fire" ],
+      "damagePerTurn": {
+        "value": 8,
+        "description": "Damage a Burned unit takes at the start of each of its owner's turns, before its damageTakenPercent. Defense and Defend don't reduce it."
+      },
+      "turns": {
+        "value": 1,
+        "description": "How many of its owner's turns a Burned unit takes damage for."
+      }
+    },
+    "immuneTypes": {
+      "description": "Units of these types never get statuses (Cleansers, §2.6).",
+      "types": [ "Cleanser" ]
+    }
+  },
+  "support": {
+    "description": "Heal, Boost, Cleanse, Revive and Repair (§2.3, §2.7). Heal restores a share of the target's max HP (healTiers) times the heal boost (matching type, Healer base), capped at max HP; it never targets towers or bases. Boost raises the target's next roll by rollModifiers.boostTiers. Cleanse removes Chill, Poison and Burn. A tower that uses any of these spends its fireCost, like firing.",
+    "adjacentDistance": {
+      "value": 1,
+      "description": "How far a character can be from a downed ally (Revive) or a friendly tower (Repair) and still count as next to it. 0 = the same space; a tower stands on the space beside its pad (D45)."
+    },
+    "healTiers": {
+      "description": "Percent of the target's max HP a Heal restores, one entry per roll tier in the same order as rollTiers (D117). Multiplied by the heal boost, rounded up, capped at what the target is missing.",
+      "tiers": [
+        {
+          "tier": "Base",
+          "percent": 30,
+          "description": "Heal roll 1-2: 30% of max HP."
+        },
+        {
+          "tier": "Strong",
+          "percent": 40,
+          "description": "Heal roll 3-4: 40% of max HP."
+        },
+        {
+          "tier": "Max",
+          "percent": 50,
+          "description": "Heal roll 5-6: 50% of max HP."
+        },
+        {
+          "tier": "Boosted",
+          "percent": 60,
+          "description": "Boosted Heal past 6: 60% of max HP."
+        }
+      ]
+    },
+    "reviveTiers": {
+      "description": "Percent of max HP a revived character comes back with, one entry per roll tier in the same order as rollTiers. Rounded up. Healers only, next to the downed ally.",
+      "tiers": [
+        {
+          "tier": "Base",
+          "percent": 30,
+          "description": "Revive roll 1-2: back at 30% of max HP."
+        },
+        {
+          "tier": "Strong",
+          "percent": 40,
+          "description": "Revive roll 3-4: back at 40% of max HP."
+        },
+        {
+          "tier": "Max",
+          "percent": 50,
+          "description": "Revive roll 5-6: back at 50% of max HP."
+        },
+        {
+          "tier": "Boosted",
+          "percent": 60,
+          "description": "Boosted Revive past 6: back at 60% of max HP."
+        }
+      ]
+    },
+    "repairTiers": {
+      "description": "Percent of max durability a Repair restores, one entry per roll tier in the same order as rollTiers. Rounded up, capped at max. Each tower can be repaired once per match, broken or not.",
+      "tiers": [
+        {
+          "tier": "Base",
+          "percent": 30,
+          "description": "Repair roll 1-2: restores 30% of max durability."
+        },
+        {
+          "tier": "Strong",
+          "percent": 40,
+          "description": "Repair roll 3-4: restores 40% of max durability."
+        },
+        {
+          "tier": "Max",
+          "percent": 50,
+          "description": "Repair roll 5-6: restores 50% of max durability."
+        },
+        {
+          "tier": "Boosted",
+          "percent": 60,
+          "description": "Boosted Repair past 6: restores 60% of max durability."
+        }
+      ]
+    },
+    "engineerRepairBonusPercent": {
+      "value": 20,
+      "description": "Percentage points added to repairTiers when the repairer is an Engineer (character or tower). Engineers also repair from their range instead of only next to the tower."
+    },
+    "downedRounds": {
+      "value": 3,
+      "description": "A downed character stays revivable until this many of its owner's turns have ended (one per round; a turn of its owner's in which it falls counts too). Then it is gone for good and leaves the board."
+    }
+  },
+  "baseRoleBonuses": {
+    "description": "Role bonuses of support and defender bases (§3.2, §3.4). The attacker-base bonus is attackerBaseBonusPercent. Each applies to the units of the player who owns that base.",
+    "healerHealBonusPercent": {
+      "value": 20,
+      "description": "Healer base: percent added to the heal boost of every heal your units make."
+    },
+    "defenderRepairBonusPercent": {
+      "value": 10,
+      "description": "Defender base (Earth, Water, Metal): percentage points added to repairTiers for every repair your units make."
+    },
+    "engineerActionPointDiscount": {
+      "value": 1,
+      "description": "Engineer base: your first Repair or Revive each turn costs this much less AP (never below 0)."
+    },
+    "boosterExtraBoostTiers": {
+      "value": 1,
+      "description": "Booster base: your Boosts raise the next roll by this many extra tiers on top of rollModifiers.boostTiers."
+    },
+    "cleanserPoisonTurnsReduction": {
+      "value": 1,
+      "description": "Cleanser base: Poison on your units lasts this many fewer turns (never below 1)."
+    }
+  },
+  "timers": {
+    "description": "Time controls (D22). The host runs both timers; they count only time spent deciding, never animations or rolls.",
+    "decisionSeconds": {
+      "value": 60,
+      "description": "Seconds the active player has to act in a battle turn. When it runs out the turn ends and unspent AP is lost."
+    },
+    "matchClockSeconds": {
+      "value": 1800,
+      "description": "Total decision time in a match (30 minutes). When it runs out the current round is finished, then the §2.8 tiebreakers decide."
+    },
+    "baseSelectionSeconds": {
+      "value": 30,
+      "description": "Seconds a player has to lock a base (D88). On timeout the highlighted base is locked, or a random one if none is highlighted."
+    },
+    "towerPlacementSeconds": {
+      "value": 30,
+      "description": "Seconds a player has for each tower placement turn (D88). On timeout the player passes."
+    },
+    "characterSelectionSeconds": {
+      "value": 60,
+      "description": "Seconds a player has to lock character picks (D88). On timeout the picks made so far are kept and the rest of the budget is filled with random characters."
+    }
+  }
+}
