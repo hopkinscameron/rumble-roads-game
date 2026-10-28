@@ -1,0 +1,407 @@
+{
+  "description": "Starter stats for every character, tower and base, one of each per type (requirements §3.2). Drafted placeholders for playtesting. Ids are kind.type and are what commands and records refer to.",
+  "stats": {
+    "id": {
+      "description": "Unique id used by commands and match records. Renaming it breaks old records."
+    },
+    "kind": {
+      "description": "Character, Tower or Base."
+    },
+    "type": {
+      "description": "One of the ten types in type-chart.json."
+    },
+    "deployCost": {
+      "description": "Budget points to deploy. Bases must be 0 (bases are free)."
+    },
+    "maxHealth": {
+      "description": "HP for characters and bases; durability for towers (one bar for firing and damage, D6). At least 1. Every character and tower starts at 100 and every base at 600 (D101); toughness differences live in damageTakenPercent."
+    },
+    "attack": {
+      "description": "Damage before multipliers. Support units use it as heal or repair strength. Bases have 0."
+    },
+    "defense": {
+      "description": "Subtracted from incoming damage (§2.6)."
+    },
+    "range": {
+      "description": "Spaces the unit can reach. 0 means its own space (D24)."
+    },
+    "damageTakenPercent": {
+      "description": "Toughness: percent of incoming damage the unit actually loses, after Defense and Defend (hits, Poison and reflected damage; rounded half up, minimum 1). 100 = normal, below 100 = tougher (Earth 63), above 100 = fragile (Fire 114). D101 set it to 2500 / the old max health, so equal health kept each unit's hits-to-down."
+    },
+    "fireCost": {
+      "description": "Towers only: durability a tower spends each time it fires (D6, D44). A shot can break the tower."
+    }
+  },
+  "units": [
+    {
+      "id": "character.fire",
+      "kind": "Character",
+      "type": "Fire",
+      "deployCost": 14,
+      "maxHealth": 100,
+      "attack": 40,
+      "defense": 8,
+      "range": 1,
+      "damageTakenPercent": 114,
+      "description": "Highest attack, fragile."
+    },
+    {
+      "id": "character.ice",
+      "kind": "Character",
+      "type": "Ice",
+      "deployCost": 12,
+      "maxHealth": 100,
+      "attack": 32,
+      "defense": 12,
+      "range": 2,
+      "damageTakenPercent": 89,
+      "description": "Medium damage at range 2; applies Chill."
+    },
+    {
+      "id": "character.poison",
+      "kind": "Character",
+      "type": "Poison",
+      "deployCost": 12,
+      "maxHealth": 100,
+      "attack": 24,
+      "defense": 8,
+      "range": 2,
+      "damageTakenPercent": 104,
+      "description": "Lower hit damage; applies Poisoned."
+    },
+    {
+      "id": "character.earth",
+      "kind": "Character",
+      "type": "Earth",
+      "deployCost": 14,
+      "maxHealth": 100,
+      "attack": 20,
+      "defense": 20,
+      "range": 0,
+      "damageTakenPercent": 63,
+      "description": "Highest HP; the lane wall. Melee only (range 0 = same space, D24)."
+    },
+    {
+      "id": "character.water",
+      "kind": "Character",
+      "type": "Water",
+      "deployCost": 12,
+      "maxHealth": 100,
+      "attack": 28,
+      "defense": 16,
+      "range": 1,
+      "damageTakenPercent": 83,
+      "description": "Sturdy all-rounder that counters Fire."
+    },
+    {
+      "id": "character.metal",
+      "kind": "Character",
+      "type": "Metal",
+      "deployCost": 14,
+      "maxHealth": 100,
+      "attack": 24,
+      "defense": 32,
+      "range": 0,
+      "damageTakenPercent": 89,
+      "description": "Highest defense. Melee only."
+    },
+    {
+      "id": "character.healer",
+      "kind": "Character",
+      "type": "Healer",
+      "deployCost": 12,
+      "maxHealth": 100,
+      "attack": 20,
+      "defense": 8,
+      "range": 2,
+      "damageTakenPercent": 114,
+      "description": "Attack is heal strength. The only unit that can Revive."
+    },
+    {
+      "id": "character.engineer",
+      "kind": "Character",
+      "type": "Engineer",
+      "deployCost": 10,
+      "maxHealth": 100,
+      "attack": 20,
+      "defense": 12,
+      "range": 2,
+      "damageTakenPercent": 89,
+      "description": "Attack is repair strength; repairs from range."
+    },
+    {
+      "id": "character.booster",
+      "kind": "Character",
+      "type": "Booster",
+      "deployCost": 10,
+      "maxHealth": 100,
+      "attack": 16,
+      "defense": 8,
+      "range": 2,
+      "damageTakenPercent": 104,
+      "description": "Boosts an ally's next roll by one tier."
+    },
+    {
+      "id": "character.cleanser",
+      "kind": "Character",
+      "type": "Cleanser",
+      "deployCost": 10,
+      "maxHealth": 100,
+      "attack": 16,
+      "defense": 12,
+      "range": 1,
+      "damageTakenPercent": 104,
+      "description": "Removes status effects; immune to them."
+    },
+    {
+      "id": "tower.fire",
+      "kind": "Tower",
+      "type": "Fire",
+      "deployCost": 16,
+      "maxHealth": 100,
+      "attack": 40,
+      "defense": 8,
+      "range": 2,
+      "damageTakenPercent": 104,
+      "fireCost": 17,
+      "description": "High damage at short range; burns durability fast."
+    },
+    {
+      "id": "tower.ice",
+      "kind": "Tower",
+      "type": "Ice",
+      "deployCost": 14,
+      "maxHealth": 100,
+      "attack": 28,
+      "defense": 12,
+      "range": 3,
+      "damageTakenPercent": 83,
+      "fireCost": 7,
+      "description": "Chills targets in range."
+    },
+    {
+      "id": "tower.poison",
+      "kind": "Tower",
+      "type": "Poison",
+      "deployCost": 14,
+      "maxHealth": 100,
+      "attack": 20,
+      "defense": 12,
+      "range": 3,
+      "damageTakenPercent": 89,
+      "fireCost": 7,
+      "description": "Poisons targets in range."
+    },
+    {
+      "id": "tower.earth",
+      "kind": "Tower",
+      "type": "Earth",
+      "deployCost": 16,
+      "maxHealth": 100,
+      "attack": 20,
+      "defense": 24,
+      "range": 2,
+      "damageTakenPercent": 50,
+      "fireCost": 4,
+      "description": "Highest durability."
+    },
+    {
+      "id": "tower.water",
+      "kind": "Tower",
+      "type": "Water",
+      "deployCost": 14,
+      "maxHealth": 100,
+      "attack": 28,
+      "defense": 16,
+      "range": 3,
+      "damageTakenPercent": 69,
+      "fireCost": 6,
+      "description": "Counters Fire units in range."
+    },
+    {
+      "id": "tower.metal",
+      "kind": "Tower",
+      "type": "Metal",
+      "deployCost": 16,
+      "maxHealth": 100,
+      "attack": 24,
+      "defense": 28,
+      "range": 3,
+      "damageTakenPercent": 69,
+      "fireCost": 6,
+      "description": "Counters Ice units in range."
+    },
+    {
+      "id": "tower.healer",
+      "kind": "Tower",
+      "type": "Healer",
+      "deployCost": 14,
+      "maxHealth": 100,
+      "attack": 20,
+      "defense": 12,
+      "range": 3,
+      "damageTakenPercent": 89,
+      "fireCost": 7,
+      "description": "Heals friendly units in range; attack is heal strength."
+    },
+    {
+      "id": "tower.engineer",
+      "kind": "Tower",
+      "type": "Engineer",
+      "deployCost": 12,
+      "maxHealth": 100,
+      "attack": 20,
+      "defense": 12,
+      "range": 3,
+      "damageTakenPercent": 83,
+      "fireCost": 7,
+      "description": "Repairs friendly towers in range; attack is repair strength."
+    },
+    {
+      "id": "tower.booster",
+      "kind": "Tower",
+      "type": "Booster",
+      "deployCost": 12,
+      "maxHealth": 100,
+      "attack": 16,
+      "defense": 12,
+      "range": 3,
+      "damageTakenPercent": 96,
+      "fireCost": 8,
+      "description": "Raises the next roll of an ally in range by one tier."
+    },
+    {
+      "id": "tower.cleanser",
+      "kind": "Tower",
+      "type": "Cleanser",
+      "deployCost": 12,
+      "maxHealth": 100,
+      "attack": 16,
+      "defense": 12,
+      "range": 3,
+      "damageTakenPercent": 89,
+      "fireCost": 7,
+      "description": "Removes status effects from allies in range."
+    },
+    {
+      "id": "base.fire",
+      "kind": "Base",
+      "type": "Fire",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Fire base. Attacker base: +damage for all attacks. Plus the matching-type bonus."
+    },
+    {
+      "id": "base.ice",
+      "kind": "Base",
+      "type": "Ice",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Ice base. Attacker base: +damage for all attacks. Plus the matching-type bonus."
+    },
+    {
+      "id": "base.poison",
+      "kind": "Base",
+      "type": "Poison",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Poison base. Attacker base: +damage for all attacks. Plus the matching-type bonus."
+    },
+    {
+      "id": "base.earth",
+      "kind": "Base",
+      "type": "Earth",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Earth base. Defender base: +repair amount. Plus the matching-type bonus."
+    },
+    {
+      "id": "base.water",
+      "kind": "Base",
+      "type": "Water",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Water base. Defender base: +repair amount. Plus the matching-type bonus."
+    },
+    {
+      "id": "base.metal",
+      "kind": "Base",
+      "type": "Metal",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Metal base. Defender base: +repair amount. Plus the matching-type bonus."
+    },
+    {
+      "id": "base.healer",
+      "kind": "Base",
+      "type": "Healer",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Healer base. Support base: role bonus to be decided (§3.2). Plus the matching-type bonus."
+    },
+    {
+      "id": "base.engineer",
+      "kind": "Base",
+      "type": "Engineer",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Engineer base. Support base: role bonus to be decided (§3.2). Plus the matching-type bonus."
+    },
+    {
+      "id": "base.booster",
+      "kind": "Base",
+      "type": "Booster",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Booster base. Support base: role bonus to be decided (§3.2). Plus the matching-type bonus."
+    },
+    {
+      "id": "base.cleanser",
+      "kind": "Base",
+      "type": "Cleanser",
+      "deployCost": 0,
+      "maxHealth": 600,
+      "attack": 0,
+      "defense": 16,
+      "range": 0,
+      "damageTakenPercent": 100,
+      "description": "Cleanser base. Support base: role bonus to be decided (§3.2). Plus the matching-type bonus."
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Rumble Roads">
+    <meta name="theme-color" content="#000000">
+    <title>Rumble Roads</title>
+    <link rel="icon" type="image/png" sizes="192x192" href="TemplateData/icon-192.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="TemplateData/apple-touch-icon.png">
+    <link rel="manifest" href="manifest.webmanifest">
+    <link rel="stylesheet" href="TemplateData/style.css">
+  </head>
+  <body>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <div id="unity-loading">
+      <div id="unity-title">Rumble Roads</div>
+      <div id="unity-progress"><div id="unity-progress-fill"></div></div>
+    </div>
+    <div id="unity-warning"></div>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+      var loading = document.querySelector("#unity-loading");
+      var progressFill = document.querySelector("#unity-progress-fill");
+      var warning = document.querySelector("#unity-warning");
+
+      function showBanner(message, type) {
+        var line = document.createElement("div");
+        line.textContent = message;
+        line.className = type == "error" ? "unity-error" : "unity-note";
+        warning.appendChild(line);
+        if (type != "error") {
+          setTimeout(function () { warning.removeChild(line); }, 5000);
+        }
+      }
+
+      var buildUrl = "Build";
+      var config = {
+        arguments: [],
+        dataUrl: buildUrl + "/dfede942eff45178a699032c151ae136.data.unityweb",
+        frameworkUrl: buildUrl + "/4fdcd0cea47dc53e79ae105aa5dc522a.framework.js.unityweb",
+        codeUrl: buildUrl + "/63867f62c48a84e0910604d1207a25eb.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "The Dragon's Lair Gaming Studio",
+        productName: "Rumble Roads",
+        productVersion: "0.1.0",
+        autoSyncPersistentDataPath: true,
+        showBanner: showBanner
+      };
+
+      var script = document.createElement("script");
+      script.src = buildUrl + "/3164a67336ff277f5b6fa435591aa0cd.loader.js";
+      script.onload = function () {
+        createUnityInstance(canvas, config, function (progress) {
+          progressFill.style.width = 100 * progress + "%";
+        }).then(function () {
+          loading.style.display = "none";
+        }).catch(function (message) {
+          showBanner(message, "error");
+        });
+      };
+      document.body.appendChild(script);
+    </script>
+  </body>
+</html>

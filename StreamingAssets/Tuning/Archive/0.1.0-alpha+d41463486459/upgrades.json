@@ -1,0 +1,198 @@
+{
+  "description": "Unit upgrade tracks: what each level from 1 to maxLevel changes (requirements §4.7; D135, D136, D142, D150, D151, D157-D162). Copies of an item share its level, and levels are fixed at match start (D149). Health never rises and combat characters never gain range. Levels only apply from rules version 2; older records replay without them.",
+  "maxLevel": {
+    "value": 5,
+    "description": "Highest unit level. Every level table below has exactly this many rows, one per level from 1."
+  },
+  "deployCost": {
+    "description": "Deploy cost by level (D151): cost x (100 + percentPerStep x (level - 1)) / 100, rounded half up, then raised to at least the cost plus the highest minimum raise reached. Bases stay free.",
+    "percentPerStep": {
+      "value": 5,
+      "description": "Percent added to the deploy cost for each level above 1."
+    },
+    "minimumRaises": {
+      "description": "Minimum points a unit costs above its level 1 cost once it reaches the given level, so cheap units' upgrades are never free (20 -> 21, 22, 23, 24; 8 -> 8, 9, 9, 10).",
+      "raises": [
+        { "level": 3, "points": 1 },
+        { "level": 5, "points": 2 }
+      ]
+    }
+  },
+  "characters": {
+    "description": "Character tracks by role (D135, D136). Attackers hit harder, Defenders take less damage, Healers and Engineers support more; Boosters and Cleansers gain reach and targets instead.",
+    "attackPercentPerStep": {
+      "value": 6,
+      "description": "Attacker characters (Fire, Ice, Poison): attack percent added for each level above 1, alongside the base bonuses (+24% at level 5)."
+    },
+    "damageTakenPercentPerStep": {
+      "value": 95,
+      "description": "Defender characters (Earth, Water, Metal): damage taken is multiplied by this percent for each level above 1, worked out exactly and rounded once (x0.81 at level 5)."
+    },
+    "supportPointsPerStep": {
+      "value": 2,
+      "description": "Healer and Engineer characters: points added to every heal, repair and revive share for each level above 1 (Heal 30/40/50% -> 32/42/52% at level 2)."
+    },
+    "booster": {
+      "description": "Booster character by level: extraRange is added to its range, allies is how many allies one Boost reaches (D136).",
+      "levels": [
+        { "level": 1, "extraRange": 0, "allies": 1 },
+        { "level": 2, "extraRange": 1, "allies": 1 },
+        { "level": 3, "extraRange": 1, "allies": 2 },
+        { "level": 4, "extraRange": 2, "allies": 2 },
+        { "level": 5, "extraRange": 2, "allies": 3 }
+      ]
+    },
+    "cleanser": {
+      "description": "Cleanser character by level: allies is how many allies one Cleanse reaches, effects is how many effects it removes from each (0 removes every effect). A partial Cleanse removes Chill first, then the effect that would still deal the most damage (D136, D142).",
+      "levels": [
+        { "level": 1, "extraRange": 0, "allies": 1, "effects": 1 },
+        { "level": 2, "extraRange": 0, "allies": 1, "effects": 2 },
+        { "level": 3, "extraRange": 0, "allies": 2, "effects": 2 },
+        { "level": 4, "extraRange": 0, "allies": 2, "effects": 0 },
+        { "level": 5, "extraRange": 0, "allies": 3, "effects": 0 }
+      ]
+    }
+  },
+  "towers": {
+    "description": "Tower tracks, one per tower (D150). Each row is the tower's whole bonus at that level, not the change from the level before.",
+    "fields": {
+      "mainEffectPercent": {
+        "description": "Percent added to the tower's own job (D142): attack for Attacker and Defender towers; for Healer and Engineer towers the heal or repair share is multiplied by (100 + this) / 100, rounded once (D158)."
+      },
+      "fireCostReduction": {
+        "description": "Durability points taken off the fire cost (never below 0)."
+      },
+      "extraRange": {
+        "description": "Spaces added to the tower's range."
+      },
+      "allies": {
+        "description": "Booster and Cleanser towers only: how many allies one action reaches (1 if left out)."
+      },
+      "effects": {
+        "description": "Cleanser tower only: effects removed from each ally, 0 for every effect (every effect if left out)."
+      }
+    },
+    "tracks": [
+      {
+        "unit": "tower.fire",
+        "description": "Attacker tower: +8% attack at levels 2 and 4, fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.ice",
+        "description": "Attacker tower: +8% attack at levels 2 and 4, fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.poison",
+        "description": "Attacker tower: +8% attack at levels 2 and 4, fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.earth",
+        "description": "Defender tower: +8% attack at levels 2 and 4, fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.water",
+        "description": "Defender tower: +8% attack at levels 2 and 4, fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.metal",
+        "description": "Defender tower: +8% attack at levels 2 and 4, fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.healer",
+        "description": "Healer tower: heal share x1.08 at level 2 and x1.16 at level 4 (D158), fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.engineer",
+        "description": "Engineer tower: repair share x1.08 at level 2 and x1.16 at level 4 (D158), fire cost -1 at level 3, range +1 at level 5.",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 2, "mainEffectPercent": 8, "fireCostReduction": 0, "extraRange": 0 },
+          { "level": 3, "mainEffectPercent": 8, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 4, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 0 },
+          { "level": 5, "mainEffectPercent": 16, "fireCostReduction": 1, "extraRange": 1 }
+        ]
+      },
+      {
+        "unit": "tower.booster",
+        "description": "Booster tower: range +1 at level 2, 2 allies at level 3, fire cost -1 at level 3, range +1 at level 5; level 4 adds nothing new (range +2 and 2 allies in all, D159).",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0, "allies": 1 },
+          { "level": 2, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 1, "allies": 1 },
+          { "level": 3, "mainEffectPercent": 0, "fireCostReduction": 1, "extraRange": 1, "allies": 2 },
+          { "level": 4, "mainEffectPercent": 0, "fireCostReduction": 1, "extraRange": 1, "allies": 2 },
+          { "level": 5, "mainEffectPercent": 0, "fireCostReduction": 1, "extraRange": 2, "allies": 2 }
+        ]
+      },
+      {
+        "unit": "tower.cleanser",
+        "description": "Cleanser tower: follows the Cleanser character for levels 2-4 (2 effects, 2 allies, every effect), fire cost -1 at level 3, range +1 at level 5; never more than 2 allies (D142).",
+        "levels": [
+          { "level": 1, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0, "allies": 1, "effects": 1 },
+          { "level": 2, "mainEffectPercent": 0, "fireCostReduction": 0, "extraRange": 0, "allies": 1, "effects": 2 },
+          { "level": 3, "mainEffectPercent": 0, "fireCostReduction": 1, "extraRange": 0, "allies": 2, "effects": 2 },
+          { "level": 4, "mainEffectPercent": 0, "fireCostReduction": 1, "extraRange": 0, "allies": 2, "effects": 0 },
+          { "level": 5, "mainEffectPercent": 0, "fireCostReduction": 1, "extraRange": 1, "allies": 2, "effects": 0 }
+        ]
+      }
+    ]
+  },
+  "bases": {
+    "description": "Bases by level (D157): matchingTypeBonusPoints is added to the matching-type bonus (10% -> 20% at level 5, 2.5 points per level rounded half up); roleBonusPoints is added to the percentage role bonuses (Attacker base attack, Healer base heal, Defender base repair). Whole-number role bonuses (Engineer AP discount, Booster extra tier, Cleanser poison turns) don't change.",
+    "levels": [
+      { "level": 1, "matchingTypeBonusPoints": 0, "roleBonusPoints": 0 },
+      { "level": 2, "matchingTypeBonusPoints": 3, "roleBonusPoints": 3 },
+      { "level": 3, "matchingTypeBonusPoints": 5, "roleBonusPoints": 5 },
+      { "level": 4, "matchingTypeBonusPoints": 8, "roleBonusPoints": 8 },
+      { "level": 5, "matchingTypeBonusPoints": 10, "roleBonusPoints": 10 }
+    ]
+  }
+}
