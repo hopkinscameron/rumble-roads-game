@@ -1,0 +1,10 @@
+{
+  "description": "What the game keeps on the device (Story 23.2.1, D255). Not part of the tuning version hash: it never changes how a match plays.",
+  "records": {
+    "description": "Match records (D85) saved after every match, in each records folder (offline/records, and sandbox/records in dev builds).",
+    "kept": {
+      "value": 100,
+      "description": "Most match records kept in each records folder. After a save, the oldest records past this number are deleted. A record is about 7 KB (up to about 25 KB), so 100 is under 1-2.5 MB, which matters most in a browser, whose storage is small and can be cleared."
+    }
+  }
+}
