@@ -37,6 +37,29 @@
         }
       }
 
+      var rumbleStorage = window.rumbleStorage = {
+        canStore: true,
+        persisted: false,
+        installed: window.navigator.standalone === true || (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches)
+      };
+
+      try {
+        var probe = window.indexedDB.open("rumble-roads-storage-check");
+        probe.onerror = function () { rumbleStorage.canStore = false; };
+        probe.onsuccess = function () { probe.result.close(); };
+      } catch (error) {
+        rumbleStorage.canStore = false;
+      }
+
+      if (navigator.storage && navigator.storage.persisted) {
+        navigator.storage.persisted().then(function (kept) {
+          rumbleStorage.persisted = kept;
+          if (!kept && navigator.storage.persist) {
+            return navigator.storage.persist().then(function (granted) { rumbleStorage.persisted = granted; });
+          }
+        }).catch(function () {});
+      }
+
       function ignoreForeignError(message, filename) {
         return !filename && String(message).indexOf("Script error") == 0;
       }
@@ -44,9 +67,9 @@
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/dfede942eff45178a699032c151ae136.data.unityweb",
-        frameworkUrl: buildUrl + "/4fdcd0cea47dc53e79ae105aa5dc522a.framework.js.unityweb",
-        codeUrl: buildUrl + "/63867f62c48a84e0910604d1207a25eb.wasm.unityweb",
+        dataUrl: buildUrl + "/781729e3218c82492838c21d27f28387.data.unityweb",
+        frameworkUrl: buildUrl + "/0aaa2e353e63920d806cf3895c4b76ef.framework.js.unityweb",
+        codeUrl: buildUrl + "/4930f421fec5b0fac65f0e0ccd0ef23d.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "The Dragon's Lair Gaming Studio",
         productName: "Rumble Roads",
@@ -57,7 +80,7 @@
       };
 
       var script = document.createElement("script");
-      script.src = buildUrl + "/3164a67336ff277f5b6fa435591aa0cd.loader.js";
+      script.src = buildUrl + "/f4848c00eadd54b41de3b4852f393b11.loader.js";
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
           progressFill.style.width = 100 * progress + "%";
