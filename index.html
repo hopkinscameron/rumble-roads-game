@@ -60,6 +60,27 @@
         }).catch(function () {});
       }
 
+      var maxPixelRatio = 2;
+
+      function fitCanvas() {
+        if (window.navigator.standalone !== true) {
+          return;
+        }
+
+        var wide = screen.orientation && screen.orientation.type ? screen.orientation.type.indexOf("landscape") == 0 : window.innerWidth > window.innerHeight;
+        var longSide = Math.max(screen.width, screen.height);
+        var shortSide = Math.min(screen.width, screen.height);
+        canvas.style.width = (wide ? longSide : shortSide) + "px";
+        canvas.style.height = (wide ? shortSide : longSide) + "px";
+      }
+
+      fitCanvas();
+      window.addEventListener("resize", fitCanvas);
+      window.addEventListener("orientationchange", function () { setTimeout(fitCanvas, 300); });
+      if (screen.orientation && screen.orientation.addEventListener) {
+        screen.orientation.addEventListener("change", fitCanvas);
+      }
+
       function ignoreForeignError(message, filename) {
         return !filename && String(message).indexOf("Script error") == 0;
       }
@@ -67,20 +88,21 @@
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/ead82d6ed48c662c86be4352a992fd7a.data.unityweb",
-        frameworkUrl: buildUrl + "/0aaa2e353e63920d806cf3895c4b76ef.framework.js.unityweb",
-        codeUrl: buildUrl + "/30cd7bdd100056d1e0e8e2e06499ec3a.wasm.unityweb",
+        dataUrl: buildUrl + "/83ae61a8d15b62407b8d14990db5e8dd.data.unityweb",
+        frameworkUrl: buildUrl + "/e35a83fca562a0b3f3cf37c74fe3b27b.framework.js.unityweb",
+        codeUrl: buildUrl + "/01ec796042187a1da7f9afc141b7dc14.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "The Dragon's Lair Gaming Studio",
         productName: "Rumble Roads",
         productVersion: "0.1.0",
         autoSyncPersistentDataPath: true,
+        devicePixelRatio: Math.min(window.devicePixelRatio || 1, maxPixelRatio),
         showBanner: showBanner,
         errorHandler: ignoreForeignError
       };
 
       var script = document.createElement("script");
-      script.src = buildUrl + "/3164a67336ff277f5b6fa435591aa0cd.loader.js";
+      script.src = buildUrl + "/ad47600b9c8a784c9daf24166a407f8b.loader.js";
       script.onload = function () {
         createUnityInstance(canvas, config, function (progress) {
           progressFill.style.width = 100 * progress + "%";
