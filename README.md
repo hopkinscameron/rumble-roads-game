@@ -8,13 +8,15 @@ This repository holds only the published web build. The game's source lives in a
 
 **https://hopkinscameron.github.io/rumble-roads-game/**
 
-On an iPhone, open the link in Safari, wait for the game to load, then tap **Share → Add to Home Screen** to play full-screen like an app. Hold the phone sideways for now.
+On an iPhone, open the link in Safari, wait for the game to load, then tap **Share → Add to Home Screen** to play full-screen like an app. Hold it upright or sideways.
 
 ## Alpha notes
 
 - This is an early alpha. It works offline only: Practice, Local Multiplayer, the Tutorial and Playground. The online modes come later.
 - The only map is Forest Valley.
 - Progress is saved in the browser. Clearing Safari's website data deletes it.
+- New look (Nov 8, 2026): every screen uses the "board game in a box" UI (flat cardboard cards, thick ink outlines, road-yellow buttons), upright, sideways and on desktop. The old stone UI and its fonts are gone; the Playground toolbox has the new look too.
+- Please note how smooth the battle feels on your phone: a performance pass follows this test.
 
 ## Updating
 
