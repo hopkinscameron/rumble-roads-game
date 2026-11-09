@@ -62,6 +62,98 @@ html, body {
   font-family: system-ui, sans-serif;
 }
 
+.unity-keyboard-bar {
+  top: 0 !important;
+  bottom: auto !important;
+  height: 1px !important;
+  overflow: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  font-size: 16px !important;
+}
+
+#rumble-stamp {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 2px);
+  left: calc(env(safe-area-inset-left) + 4px);
+  z-index: 20;
+  font: 600 10px/1.2 system-ui, sans-serif;
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+}
+
+#rumble-diagnostics {
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 16px);
+  left: calc(env(safe-area-inset-left) + 4px);
+  right: calc(env(safe-area-inset-right) + 4px);
+  max-height: 75%;
+  z-index: 21;
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.85);
+  color: #e8e8e8;
+  font: 11px/1.35 ui-monospace, Menlo, monospace;
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+.rumble-diagnostics-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.rumble-diagnostics-bar button {
+  min-height: 36px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: #f2b632;
+  color: #000;
+  font: 700 13px system-ui, sans-serif;
+}
+
+.rumble-diagnostics-readout,
+.rumble-diagnostics-log {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.rumble-diagnostics-log {
+  flex: 1;
+  min-height: 60px;
+  overflow: auto;
+  touch-action: pan-y;
+  -webkit-overflow-scrolling: touch;
+  border-top: 1px solid #555;
+  padding-top: 6px;
+}
+
+#rumble-diagnostics-probe {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 0;
+  height: 0;
+  visibility: hidden;
+  pointer-events: none;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+.rumble-diagnostics-copy {
+  position: fixed;
+  top: 0;
+  left: 0;
+  opacity: 0;
+  font-size: 16px;
+}
+
 .unity-note {
   background: #f2d64b;
   color: #000;
