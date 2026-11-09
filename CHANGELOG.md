@@ -2,6 +2,22 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.3.0-alpha — Nov 9, 2026
+Branch `build/v0.3.0-alpha-minimal-battle-hud` · stamp `0.3.0-alpha+2c93ff55` · data 28.0 MB
+
+**Changed**
+- Minimal battle HUD, top bar and rows: a slimmer top bar with both castles' HP, the active side's AP dots and a clock showing the time and round. The turn banner and turn line are gone. Their row is hidden until you tap its button. Your row and the action feed tuck behind round buttons, and a yellow dot shows when there's a new event (D402).
+- One small tray replaces the big unit card, aim panel and move panel. The roll stamp is now a die chip that drops in, shows the face and fades. On touch, "Tap again to attack" shows above the tray. The CPU's aim shows as a tray with no buttons (D403).
+- Desktop: your row sits beside the tray and the die chip sits under the top bar. Icon-only buttons have mouse tooltips. Lessons open tucked parts while they point at them (D404).
+
+**Test on the phone**
+- A battle against the CPU, folded and unfolded, held upright and sideways: the top bar, AP dots and clock; selecting a unit (tray), aiming (tray, "Tap again to attack"), moving, and the die chip after a roll.
+- Tuck and untuck your row, their row and the feed. Check the new-event dot, and that the tucks are remembered next match.
+- Press and hold a unit for the inspect card (role, level and stats now live there).
+- Local two-player: the handoff curtain between turns.
+- Text size: whether the 11-pt round line, feed tag and tray small line read well (open question 44).
+- Hold End turn; pause from the pill (shows match time); the camera panel.
+
 ## 0.2.1-alpha — Nov 9, 2026 (rebuilt)
 Branch `build/v0.2.1-alpha-phone-taps-sounds-scroll` · stamp `0.2.1-alpha+33c63ae.dirty` · data 28.0 MB (first build Nov 8: `0.2.1-alpha+562caeb.dirty`, couldn't show the bases on the unfolded phone)
 
