@@ -16,8 +16,8 @@ On an iPhone, open the link in Safari, wait for the game to load, then tap **Sha
 - The only map is Forest Valley.
 - Progress is saved in the browser. Clearing Safari's website data deletes it.
 - New look (Nov 8, 2026): every screen uses the "board game in a box" UI (flat cardboard cards, thick ink outlines, road-yellow buttons), upright, sideways and on desktop. The old stone UI and its fonts are gone; the Playground toolbox has the new look too.
-- Please note how smooth the battle feels on your phone: a performance pass follows this test.
+- What each build changed and what to test: see [CHANGELOG.md](CHANGELOG.md).
 
 ## Updating
 
-Replace every file except `.git`, `README.md` and `.nojekyll` with a new Web Release build, then commit and push. GitHub Pages republishes within a minute or two.
+Replace every file except `.git`, `.gitignore`, `.nojekyll`, `README.md` and `CHANGELOG.md` with a new Web Release build on a `build/v<version>-<what-changed>` branch, add the version to `CHANGELOG.md`, then commit and push. GitHub Pages republishes within a minute or two.
