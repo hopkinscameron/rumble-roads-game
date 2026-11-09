@@ -13,6 +13,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="TemplateData/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="stylesheet" href="TemplateData/style.css">
+    <script>window.rumbleVersion = "0.1.0";</script>
+    <script src="TemplateData/diagnostics.js"></script>
   </head>
   <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
@@ -62,24 +64,44 @@
 
       var maxPixelRatio = 2;
 
+      function typing() {
+        var focused = document.activeElement;
+        return !!focused && (focused.tagName == "INPUT" || focused.tagName == "TEXTAREA");
+      }
+
       function fitCanvas() {
-        if (window.navigator.standalone !== true) {
+        if (window.navigator.standalone !== true || typing()) {
           return;
         }
 
-        var wide = screen.orientation && screen.orientation.type ? screen.orientation.type.indexOf("landscape") == 0 : window.innerWidth > window.innerHeight;
-        var longSide = Math.max(screen.width, screen.height);
-        var shortSide = Math.min(screen.width, screen.height);
-        canvas.style.width = (wide ? longSide : shortSide) + "px";
-        canvas.style.height = (wide ? shortSide : longSide) + "px";
+        var root = document.documentElement;
+        canvas.style.width = Math.max(window.innerWidth, root.clientWidth) + "px";
+        canvas.style.height = Math.max(window.innerHeight, root.clientHeight) + "px";
       }
 
       fitCanvas();
       window.addEventListener("resize", fitCanvas);
       window.addEventListener("orientationchange", function () { setTimeout(fitCanvas, 300); });
+      document.addEventListener("focusout", function () { setTimeout(fitCanvas, 300); });
       if (screen.orientation && screen.orientation.addEventListener) {
         screen.orientation.addEventListener("change", fitCanvas);
       }
+
+      function quietKeyboardBar(node) {
+        if (node.nodeType != 1 || node.tagName != "DIV" || node.id || !node.querySelector) {
+          return;
+        }
+
+        var input = node.querySelector("input, textarea");
+        var button = node.querySelector("button");
+        if (input && button && button.textContent == "OK") {
+          node.className = "unity-keyboard-bar";
+        }
+      }
+
+      new MutationObserver(function (changes) {
+        changes.forEach(function (change) { change.addedNodes.forEach(quietKeyboardBar); });
+      }).observe(document.body, { childList: true });
 
       function ignoreForeignError(message, filename) {
         return !filename && String(message).indexOf("Script error") == 0;
@@ -88,9 +110,9 @@
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/83ae61a8d15b62407b8d14990db5e8dd.data.unityweb",
-        frameworkUrl: buildUrl + "/e35a83fca562a0b3f3cf37c74fe3b27b.framework.js.unityweb",
-        codeUrl: buildUrl + "/01ec796042187a1da7f9afc141b7dc14.wasm.unityweb",
+        dataUrl: buildUrl + "/85ff2b354d85029f4a8c530d833c16f8.data.unityweb",
+        frameworkUrl: buildUrl + "/855aa0b6586ba44d0d09014c0597b6d4.framework.js.unityweb",
+        codeUrl: buildUrl + "/28af5bcba7f3e0ec0e84f777eb386dd5.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "The Dragon's Lair Gaming Studio",
         productName: "Rumble Roads",
@@ -102,11 +124,18 @@
       };
 
       var script = document.createElement("script");
-      script.src = buildUrl + "/ad47600b9c8a784c9daf24166a407f8b.loader.js";
+      script.src = buildUrl + "/3b925a2fed3e2b111572d2e93d783501.loader.js";
+      var downloaded = false;
       script.onload = function () {
+        rumbleDiagnostics.mark("loader");
         createUnityInstance(canvas, config, function (progress) {
           progressFill.style.width = 100 * progress + "%";
+          if (!downloaded && progress >= 0.9) {
+            downloaded = true;
+            rumbleDiagnostics.mark("downloaded");
+          }
         }).then(function () {
+          rumbleDiagnostics.mark("ready");
           loading.style.display = "none";
         }).catch(function (message) {
           showBanner(message, "error");
