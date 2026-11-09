@@ -13,7 +13,7 @@
     <link rel="apple-touch-icon" sizes="180x180" href="TemplateData/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
     <link rel="stylesheet" href="TemplateData/style.css">
-    <script>window.rumbleVersion = "0.2.1-alpha";</script>
+    <script>window.rumbleVersion = "0.3.0-alpha";</script>
     <script src="TemplateData/diagnostics.js"></script>
   </head>
   <body>
@@ -103,20 +103,44 @@
         changes.forEach(function (change) { change.addedNodes.forEach(quietKeyboardBar); });
       }).observe(document.body, { childList: true });
 
+      [window.AudioContext, window.webkitAudioContext, window.OfflineAudioContext].forEach(function (type) {
+        if (!type || !type.prototype.decodeAudioData || type.prototype.decodeAudioData.rumbleQuiet) {
+          return;
+        }
+
+        var decode = type.prototype.decodeAudioData;
+        var quiet = function (data, onDone, onFail) {
+          var size = data ? data.byteLength : 0;
+          var result = decode.call(this, data, onDone, function (error) {
+            console.warn("Audio decode failed, " + size + " bytes: " + (error && error.message ? error.message : error));
+            if (onFail) {
+              onFail(error);
+            }
+          });
+          if (result && result.catch) {
+            result.catch(function () {});
+          }
+          return result;
+        };
+        quiet.rumbleQuiet = true;
+        type.prototype.decodeAudioData = quiet;
+      });
+
       function ignoreForeignError(message, filename) {
-        return !filename && String(message).indexOf("Script error") == 0;
+        var text = String(message);
+        return (!filename && text.indexOf("Script error") == 0) || text.indexOf("EncodingError") == 0;
       }
 
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/a71d2a0ed3236afe96df3269b6fab7e3.data.unityweb",
+        dataUrl: buildUrl + "/27bdf42a3ec236a632e8c8e8b7437390.data.unityweb",
         frameworkUrl: buildUrl + "/32d52ac1d72cb468c4006cddef78e48c.framework.js.unityweb",
-        codeUrl: buildUrl + "/95c6b79c7b97885841390cd34007c76e.wasm.unityweb",
+        codeUrl: buildUrl + "/a0bd54443c64c179d160ebc6bc0cf5ff.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "The Dragon's Lair Gaming Studio",
         productName: "Rumble Roads",
-        productVersion: "0.2.1-alpha",
+        productVersion: "0.3.0-alpha",
         autoSyncPersistentDataPath: true,
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, maxPixelRatio),
         showBanner: showBanner,
@@ -124,7 +148,7 @@
       };
 
       var script = document.createElement("script");
-      script.src = buildUrl + "/a31b8dad9a235b7036f8a16bf90ad734.loader.js";
+      script.src = buildUrl + "/52e2ddcdabdad4f47b40b1f6d97df689.loader.js";
       var downloaded = false;
       script.onload = function () {
         rumbleDiagnostics.mark("loader");
