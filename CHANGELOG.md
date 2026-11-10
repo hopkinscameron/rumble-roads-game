@@ -2,6 +2,18 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.3.2-alpha — Nov 10, 2026
+Branch `build/v0.3.2-alpha-short-sounds-round-bars` · stamp `0.3.2-alpha+ca43c267` · data 29.4 MB
+
+**Changed**
+- Button clicks and other short sounds should now play on the iPhone: every sound under 0.3 s plays a copy with silence added at the end (iPhone Safari drops very short clips), and they load at start so the first click isn't lost (D406).
+- Health bars over units on the board have rounded fills, matching the HUD's bars when zoomed in (D406).
+
+**Test on the phone**
+- Menu buttons (Settings, Done, Account, Back) click, including the very first tap.
+- Selecting a unit plays its tick; the "can't" sound on a disabled button; the last five seconds of the turn timer tick.
+- Zoom onto a unit: its bar is a rounded pill, full and after taking damage.
+
 ## 0.3.1-alpha — Nov 10, 2026
 Branch `build/v0.3.1-alpha-hud-fixes-sound-logs` · stamp `0.3.1-alpha+8c51d7af` · data 28.0 MB
 
