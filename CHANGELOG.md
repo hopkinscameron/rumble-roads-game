@@ -2,6 +2,28 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.3.1-alpha — Nov 10, 2026
+Branch `build/v0.3.1-alpha-hud-fixes-sound-logs` · stamp `0.3.1-alpha+8c51d7af` · data 28.0 MB
+
+**Changed**
+- Sound logs for the silent button clicks: each button press logs whether it asked for a click, each click logs its clip's load state and volume, and the diagnostics Copy text ends with the browser's audio state (suspended or running).
+- Phone held sideways (folded or unfolded): the unit, aim and move trays and the hint sit above your row, so the portrait, name and words fit (D405).
+- Smaller HUD lines: the clock's round line 9 pt; the feed note, tray small line and tray button words 10 pt (D405).
+- "Your turn" / "Their turn" shows for a moment where the hint sits when the turn changes; their action-point dots go down as they act (D405).
+- The board's Blocked chip is now a red lock beside the pinned unit's health bar (D405).
+- After picking a move, only the picked space stays lit until the unit gets there (D405).
+- Music pauses in the pause menu and carries on from the same spot (D405).
+- The aim tray adds the status chance or cleanse reach ("Pick a target · Chills on 4–6"); the inspect card gives the full sentence (D405).
+- Tower placement says "Pick a tower, then tap a glowing pad. Or pass." (D405).
+
+**Test on the phone**
+- **Sound logs (first):** open the game, tap the main menu's Play, Practice and Back buttons a few times, then tap the stamp five times, press Copy and paste the text. The lines starting `[Sound]` and the last line, `Audio …`, show where the click goes missing.
+- Phone held sideways, folded and unfolded: tap a unit (tray above your row), Attack (the note after "Pick a target"), Move.
+- End your turn: "Their turn", their dots emptying; then "Your turn".
+- A pinned unit (an enemy on its space): the red lock by its health bar.
+- Open pause: the music stops, and carries on when you resume.
+- Still owed from 0.3.0: inspect by press and hold, and the local-play handoff curtain.
+
 ## 0.3.0-alpha — Nov 9, 2026
 Branch `build/v0.3.0-alpha-minimal-battle-hud` · stamp `0.3.0-alpha+2c93ff55` · data 28.0 MB
 
