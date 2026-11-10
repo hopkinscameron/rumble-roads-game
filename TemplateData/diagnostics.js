@@ -47,6 +47,28 @@
     };
   });
 
+  ["AudioContext", "webkitAudioContext"].forEach(function (name) {
+    var Original = window[name];
+    if (!Original) {
+      return;
+    }
+
+    var Watched = function () {
+      var context = new (Function.prototype.bind.apply(Original, [null].concat(Array.prototype.slice.call(arguments))))();
+      state.audio = context;
+      add("info", ["audio context " + context.state]);
+      if (context.addEventListener) {
+        context.addEventListener("statechange", function () {
+          add("info", ["audio context " + context.state]);
+        });
+      }
+
+      return context;
+    };
+    Watched.prototype = Original.prototype;
+    window[name] = Watched;
+  });
+
   window.addEventListener("error", function (event) {
     add("error", [event.message + " @ " + (event.filename || "?") + ":" + (event.lineno || 0)]);
   });
@@ -142,8 +164,14 @@
       "",
       deviceLines().join("\n"),
       "",
-      "Load " + (state.marks.join("  ") || "?")
+      "Load " + (state.marks.join("  ") || "?"),
+      audioLine()
     ].join("\n");
+  }
+
+  function audioLine() {
+    var context = state.audio;
+    return context ? "Audio " + context.state + "  " + context.sampleRate + " Hz" : "Audio no context yet";
   }
 
   function refresh() {
