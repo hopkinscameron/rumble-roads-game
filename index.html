@@ -7,26 +7,85 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="Rumble Roads">
-    <meta name="theme-color" content="#000000">
+    <meta name="theme-color" content="#FFC633">
     <title>Rumble Roads</title>
-    <link rel="icon" type="image/png" sizes="192x192" href="TemplateData/icon-192.png">
-    <link rel="apple-touch-icon" sizes="180x180" href="TemplateData/apple-touch-icon.png">
+    <link rel="icon" href="TemplateData/icons/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="TemplateData/icons/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="TemplateData/icons/apple-touch-icon.png">
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="preload" href="TemplateData/fonts/BowlbyOne-Regular.ttf" as="font" type="font/ttf" crossorigin>
     <link rel="stylesheet" href="TemplateData/style.css">
-    <script>window.rumbleVersion = "0.3.3-alpha";</script>
+    <script>window.rumbleVersion = "0.3.4-alpha";</script>
     <script src="TemplateData/diagnostics.js"></script>
   </head>
   <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
-    <div id="unity-loading">
-      <div id="unity-title">Rumble Roads</div>
-      <div id="unity-progress"><div id="unity-progress-fill"></div></div>
+    <div id="rr-splash" aria-label="Loading Rumble Roads">
+      <svg class="rr-mark" viewBox="143 142 700 780" aria-hidden="true"><defs><mask id="rr-pm" maskUnits="userSpaceOnUse" x="0" y="0" width="1024" height="1100"><path id="rr-mb" class="rr-paint" d="M290 900 V 250 H 520 A 176 176 0 0 1 520 602 H 372" fill="none" stroke="#fff" stroke-width="64" stroke-dasharray="1580.9 1580.9" stroke-dashoffset="1580.9"/><path id="rr-ml" class="rr-paint" d="M560 708.7 L 667.6 900" fill="none" stroke="#fff" stroke-width="64" stroke-dasharray="219.4 219.4" stroke-dashoffset="219.4"/></mask></defs><defs><clipPath id="rr-clip"><rect x="0" y="0" width="1024" height="900"/></clipPath></defs><g clip-path="url(#rr-clip)"><path d="M290 1020 V 250 H 520 A 176 176 0 0 1 520 602 H 290" fill="none" stroke="#1D1832" stroke-width="176" stroke-linejoin="round"/><path d="M500 602 L 735.0 1020" fill="none" stroke="#1D1832" stroke-width="176" stroke-linejoin="round"/><path d="M290 1020 V 250 H 520 A 176 176 0 0 1 520 602 H 290" fill="none" stroke="#2A2C3B" stroke-width="138" stroke-linejoin="round"/><path d="M500 602 L 735.0 1020" fill="none" stroke="#2A2C3B" stroke-width="138" stroke-linejoin="round"/><g mask="url(#rr-pm)"><path d="M290 1020 V 250 H 520 A 176 176 0 0 1 520 602 H 372" fill="none" stroke="#FFC633" stroke-width="18" stroke-dasharray="44 40" stroke-linecap="round" stroke-linejoin="round"/><path d="M560 708.7 L 735.0 1020" fill="none" stroke="#FFC633" stroke-width="18" stroke-dasharray="44 40" stroke-linecap="round" stroke-linejoin="round"/></g></g><circle id="rr-head" cx="290" cy="900" r="22" fill="#FDF3DE" stroke="#1D1832" stroke-width="9" opacity="0"/></svg>
+      <div class="rr-text">
+        <div class="rr-title">RUMBLE ROADS</div>
+        <div class="rr-status" id="rr-status" aria-live="polite">Unboxing the board… 0%</div>
+        <div class="rr-sub" id="rr-sub"></div>
+        <button class="rr-btn" id="rr-btn" type="button" hidden>Tap to play</button>
+      </div>
+      <div class="rr-sr" id="rr-bar" role="progressbar" aria-label="Loading" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"></div>
     </div>
     <div id="unity-warning"></div>
     <script>
+      (function () {
+        var splash = document.getElementById("rr-splash");
+        var mb = document.getElementById("rr-mb"), ml = document.getElementById("rr-ml"), head = document.getElementById("rr-head");
+        var statusEl = document.getElementById("rr-status"), subEl = document.getElementById("rr-sub"), btn = document.getElementById("rr-btn"), bar = document.getElementById("rr-bar");
+        var LB = mb.getTotalLength(), LL = ml.getTotalLength();
+        mb.style.strokeDasharray = LB + " " + LB; ml.style.strokeDasharray = LL + " " + LL;
+        mb.style.strokeDashoffset = LB; ml.style.strokeDashoffset = LL;
+        var LINES = [[0.25, "Unboxing the board"], [0.5, "Laying the roads"], [0.75, "Painting the lines"], [1.01, "Rolling the dice"]];
+        var touch = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+        var still = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        var failed = false;
+        function line(p) { for (var i = 0; i < LINES.length; i++) if (p < LINES[i][0]) return LINES[i][1]; return LINES[LINES.length - 1][1]; }
+        function paint(p) {
+          var d = p * (LB + LL);
+          mb.style.strokeDashoffset = LB - Math.min(LB, d);
+          ml.style.strokeDashoffset = LL - Math.max(0, d - LB);
+          var pt = d <= LB ? mb.getPointAtLength(d) : ml.getPointAtLength(d - LB);
+          head.setAttribute("cx", pt.x); head.setAttribute("cy", pt.y);
+          head.setAttribute("opacity", p > 0.003 && p < 0.997 ? 1 : 0);
+        }
+        function setProgress(p) {
+          if (failed) return;
+          p = Math.max(0, Math.min(1, p || 0));
+          paint(p);
+          var pc = Math.round(p * 100);
+          statusEl.textContent = line(p) + "… " + pc + "%";
+          bar.setAttribute("aria-valuenow", pc);
+        }
+        function hide() {
+          splash.classList.add("rr-gone");
+          setTimeout(function () { if (splash.parentNode) splash.parentNode.removeChild(splash); }, still ? 0 : 400);
+        }
+        function ready(onPlay, opts) {
+          var needsTap = !opts || opts.needsTap !== false;
+          paint(1); bar.setAttribute("aria-valuenow", 100);
+          statusEl.textContent = "Ready"; subEl.textContent = "";
+          if (!needsTap) { hide(); if (onPlay) onPlay(); return; }
+          btn.textContent = touch ? "Tap to play" : "Click to play";
+          btn.hidden = false; btn.focus();
+          btn.onclick = function () { hide(); if (onPlay) onPlay(); };
+        }
+        function fail(onRetry) {
+          failed = true;
+          statusEl.textContent = "Couldn’t load the game";
+          subEl.textContent = "Check your connection and try again.";
+          head.setAttribute("opacity", 0);
+          btn.textContent = "Try again"; btn.hidden = false; btn.focus();
+          btn.onclick = function () { if (onRetry) onRetry(); else location.reload(); };
+        }
+        window.RRSplash = { setProgress: setProgress, ready: ready, fail: fail, hide: hide };
+      })();
+    </script>
+    <script>
       var canvas = document.querySelector("#unity-canvas");
-      var loading = document.querySelector("#unity-loading");
-      var progressFill = document.querySelector("#unity-progress-fill");
       var warning = document.querySelector("#unity-warning");
 
       function showBanner(message, type) {
@@ -134,13 +193,13 @@
       var buildUrl = "Build";
       var config = {
         arguments: [],
-        dataUrl: buildUrl + "/6193fa346845bcb9a3c9bcaef4c4eba0.data.unityweb",
+        dataUrl: buildUrl + "/da6a268c33bd2a826851de9a3ab6948f.data.unityweb",
         frameworkUrl: buildUrl + "/32d52ac1d72cb468c4006cddef78e48c.framework.js.unityweb",
         codeUrl: buildUrl + "/0c88420ad41c3b6200fd1cacdebe13a0.wasm.unityweb",
         streamingAssetsUrl: "StreamingAssets",
         companyName: "The Dragon's Lair Gaming Studio",
         productName: "Rumble Roads",
-        productVersion: "0.3.3-alpha",
+        productVersion: "0.3.4-alpha",
         autoSyncPersistentDataPath: true,
         devicePixelRatio: Math.min(window.devicePixelRatio || 1, maxPixelRatio),
         showBanner: showBanner,
@@ -148,22 +207,27 @@
       };
 
       var script = document.createElement("script");
-      script.src = buildUrl + "/8bfa3657d634bb2ff6d51f9e0772fee5.loader.js";
+      script.src = buildUrl + "/76292f683a2ff647ab3246b2a5f45b76.loader.js";
       var downloaded = false;
       script.onload = function () {
         rumbleDiagnostics.mark("loader");
         createUnityInstance(canvas, config, function (progress) {
-          progressFill.style.width = 100 * progress + "%";
+          RRSplash.setProgress(progress);
           if (!downloaded && progress >= 0.9) {
             downloaded = true;
             rumbleDiagnostics.mark("downloaded");
           }
         }).then(function () {
           rumbleDiagnostics.mark("ready");
-          loading.style.display = "none";
+          RRSplash.ready(function () { canvas.focus(); });
         }).catch(function (message) {
-          showBanner(message, "error");
+          console.error(message);
+          RRSplash.fail(function () { location.reload(); });
         });
+      };
+      script.onerror = function () {
+        console.error("Couldn't load " + script.src);
+        RRSplash.fail(function () { location.reload(); });
       };
       document.body.appendChild(script);
     </script>
