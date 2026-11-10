@@ -2,6 +2,17 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.3.3-alpha — Nov 10, 2026
+Branch `build/v0.3.3-alpha-short-sound-attack` · stamp `0.3.3-alpha+33d28345` · data 29.4 MB
+
+**Changed**
+- Button clicks and the other short sounds start 50 ms in, so the web build's audio encoding keeps their sharp start. In 0.3.2 the click came out almost silent (checked in a desktop browser: the click now plays at full level instead of about 2%) (D406).
+
+**Test on the phone**
+- Menu buttons (Settings, Done, Account, Back) click; the very first tap of a session may still be silent.
+- Selecting a unit plays its tick; the "can't" sound on a disabled button; the last five seconds of the turn timer tick.
+- The clicks don't feel late after a tap.
+
 ## 0.3.2-alpha — Nov 10, 2026
 Branch `build/v0.3.2-alpha-short-sounds-round-bars` · stamp `0.3.2-alpha+ca43c267` · data 29.4 MB
 
