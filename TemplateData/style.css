@@ -4,7 +4,7 @@ html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
-  background: #000;
+  background: #FFC633;
   touch-action: none;
   -webkit-user-select: none;
   user-select: none;
@@ -21,40 +21,141 @@ html, body {
   background: #000;
 }
 
-#unity-loading {
+@font-face {
+  font-family: "Bowlby One";
+  src: url("fonts/BowlbyOne-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Overpass";
+  src: url("fonts/Overpass-Variable.ttf") format("truetype");
+  font-weight: 100 900;
+  font-display: swap;
+}
+
+#rr-splash {
   position: fixed;
   inset: 0;
+  z-index: 10;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  color: #fff;
-  font-family: system-ui, sans-serif;
+  gap: 22px;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+  background: #FFC633;
+  color: #1D1832;
+  font-family: Overpass, system-ui, sans-serif;
+  transition: opacity .35s ease-out;
 }
 
-#unity-title {
-  font-size: 32px;
-  font-weight: 800;
-  letter-spacing: 1px;
+#rr-splash.rr-gone {
+  opacity: 0;
+  pointer-events: none;
 }
 
-#unity-progress {
-  width: 60%;
-  max-width: 320px;
-  height: 12px;
-  border-radius: 6px;
-  background: #333;
+.rr-mark {
+  height: min(38vh, 330px);
+  width: auto;
+  overflow: visible;
+}
+
+.rr-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.rr-title {
+  font: 400 clamp(32px, 6.4vw, 48px)/1 "Bowlby One", Impact, sans-serif;
+  letter-spacing: .01em;
+}
+
+.rr-status {
+  font: 800 clamp(15px, 1.6vw, 18px)/1.3 Overpass, system-ui, sans-serif;
+  opacity: .82;
+  min-height: 1.3em;
+}
+
+.rr-sub {
+  font: 600 14px/1.3 Overpass, system-ui, sans-serif;
+  opacity: .7;
+  min-height: 1.3em;
+}
+
+.rr-btn {
+  margin-top: 10px;
+  height: 51px;
+  padding: 0 27px;
+  border-radius: 17px;
+  cursor: pointer;
+  background: #2A2C3B;
+  color: #FDF3DE;
+  border: 3px solid #1D1832;
+  font: 900 17px/1 Overpass, system-ui, sans-serif;
+  box-shadow: 0 6px 0 -3px #C29A64, 0 6px 0 0 #1D1832;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.rr-btn:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 -3px #C29A64, 0 2px 0 0 #1D1832;
+}
+
+.rr-btn:focus-visible {
+  outline: 3px solid #1D1832;
+  outline-offset: 4px;
+}
+
+.rr-btn[hidden] {
+  display: none;
+}
+
+.rr-paint {
+  transition: stroke-dashoffset .25s linear;
+}
+
+.rr-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
   overflow: hidden;
+  clip: rect(0 0 0 0);
 }
 
-#unity-progress-fill {
-  width: 0;
-  height: 100%;
-  background: #f2b632;
+@media (orientation: landscape) and (max-height: 500px) {
+  #rr-splash {
+    flex-direction: row;
+    gap: 56px;
+  }
+
+  .rr-mark {
+    height: 70vh;
+  }
+
+  .rr-text {
+    align-items: flex-start;
+    text-align: left;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rr-paint,
+  #rr-splash {
+    transition: none;
+  }
+
+  #rr-head {
+    display: none;
+  }
 }
 
 #unity-warning {
+  z-index: 12;
   position: fixed;
   left: 0;
   right: 0;

@@ -2,6 +2,21 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.3.4-alpha — Nov 10, 2026
+Branch `build/v0.3.4-alpha-app-icon-splash` · stamp `0.3.4-alpha+3128fc81` · data 29.4 MB
+
+**Changed**
+- New app icon, the Road R: favicon, home-screen icon and the web app manifest's icons (including Android's maskable ones). The theme colour, manifest colours and page background are road yellow (D408).
+- New loading splash in place of the old loading bar: the R's centre line paints in as the game loads, under a status phrase and percentage, then "Tap to play" starts the game. A failed load shows "Couldn't load the game" with Try again (D408).
+
+**Test on the phone**
+- Remove the old home-screen app, then Share → Add to Home Screen: the icon is the yellow Road R.
+- Launch it: yellow from the first frame (no white or black flash, yellow behind the status bar), the R paints in, a pause near 90% is expected.
+- Tap to play starts the game and the menu buttons make sound.
+- Turn the phone sideways while it loads: R on the left, text on the right.
+- With Settings → Accessibility → Motion → Reduce Motion on: no marker dot, no fade.
+- Is the white build stamp at the top left readable on the yellow?
+
 ## 0.3.3-alpha — Nov 10, 2026
 Branch `build/v0.3.3-alpha-short-sound-attack` · stamp `0.3.3-alpha+33d28345` · data 29.4 MB
 
