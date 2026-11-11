@@ -2,6 +2,25 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.4.0-alpha — Nov 11, 2026
+Branch `build/v0.4.0-alpha-3d-art-pass` · stamp `0.4.0-alpha+4dac168e` · data 31.0 MB
+
+**Changed**
+- The 3D art pass, slices A0 to A12 (D409–D422):
+- Pieces regraded to warm stone and kraft, with an ink outline and team marks (D409). The ten types use the UI's colours, each with a dark and a light shade (D410).
+- Every attacker, defender and support has its own silhouette: helms, hoods, halos, weapons and staffs (D411–D413).
+- All ten towers have their own tops, two-sided crest banners and type props (D414, D415). The Engineer's cogs, the Booster's dice and the Cleanser's diamonds circle their towers (D419).
+- The castles' side keeps nest the type towers, and the castle owner flags fly sideways (D416, D417). Bigger gate banners and a trim band across the gatehouse (D420).
+- One-handed weapons and the wand are held up while idle. The heal sends up 1, 2, 3 or 5 pink hearts, depending on the roll tier (D421).
+- Menu islands: the castles are the battle castles (side keep, tower, crests, dressing, home plate with team rim and owner flags). The islands are bigger (D422).
+
+**Test on the phone**
+- Main menu: is it smooth while swiping between islands? The first island now draws about 3,300 calls (2,485 before). If it's choppier than 0.3.4, say so; the next step would be merging each island's ground.
+- Menu castles: the blue rim and flags are on the first castle and the red on the second; the Engineer's cogs turn.
+- Start a match. From the battle camera, check that each type reads by silhouette and colour, the crests and gate banners show, and the tower extras move.
+- Heal with low and high rolls: more hearts at higher tiers.
+- Armory: the character and tower pictures match the new looks.
+
 ## 0.3.4-alpha — Nov 10, 2026
 Branch `build/v0.3.4-alpha-app-icon-splash` · stamp `0.3.4-alpha+3128fc81` · data 29.4 MB
 
