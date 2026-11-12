@@ -2,6 +2,27 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.4.1-alpha — Nov 11, 2026
+Branch `build/v0.4.1-alpha-tutorial-mobile-pass` · stamp `0.4.1-alpha+f985646b` · data 30.9 MB
+
+**Changed**
+- Tutorial fixes from the 0.4.0-alpha phone test (D423):
+- The glowing spaces are hex outlines, like the battle's (D423).
+- The coach frames what it talks about between its card and your units: a move shows the mover and every yellow hex it can reach, an attack shows the attacker and its target, and the castles pull back on a narrow screen (D423).
+- With a finger, the coach talks about dragging, pinching, the Follow button and tapping, not keys and the mouse. Every task fits on one line (D423).
+- "Yellow hexes" and "spaces" replace "green rings" and "markers" (D423).
+- The round base and type plaque under each character are gone; the team still shows on the sash (D423).
+- On the phone, the selected unit's outline is thinner and a softer yellow (D423).
+- Holding the phone sideways (or on desktop), the coach card sits on the left and the camera now frames everything in the strip to its right, including castles, lanes, glows and move hexes (D424).
+- In the draft lesson on a sideways phone, the coach card sits at the top left, so every button, the coin and your tower pads stay clear (D424).
+
+**Test on the phone**
+- Lesson 1 upright: the glowing spaces are hexes, and pressing Move shows every yellow hex above the units bar.
+- Lesson 1 sideways: the castle lines, the lanes and the "You rolled a 4" step show right of the coach card, never under it.
+- Lesson 1's camera steps with a finger: the coach says drag, pinch and twist, and the Follow task says to tap Follow.
+- The draft lesson sideways: you can reach Lock, the + buttons, the coin and the tower pads with the card showing.
+- Select a character and hold still: does its yellow outline still crawl (open question 49)?
+
 ## 0.4.0-alpha — Nov 11, 2026
 Branch `build/v0.4.0-alpha-3d-art-pass` · stamp `0.4.0-alpha+4dac168e` · data 31.0 MB
 
