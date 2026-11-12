@@ -2,6 +2,22 @@
 
 Each web build pushed here gets a version (`0.MINOR.PATCH-alpha`: minor for a batch of changes, patch for fixes only) and a branch named `build/v<version>-<what-changed>`. The version and commit show at the top left of the game; five taps on them open the diagnostics panel.
 
+## 0.4.2-alpha — Nov 12, 2026
+Branch `build/v0.4.2-alpha-tutorial-phone-fixes` · stamp `0.4.2-alpha+7e3f816b` · data 30.9 MB
+
+**Changed**
+- Tutorial fixes from the 0.4.1-alpha phone test (D425):
+- During a task the coach card shrinks to a one-line strip (the coach's face, the task and an expand arrow). It tucks itself on your first tap outside it, or with its minimize button. It opens again by itself for the next task, or waits with a pulsing "new tip" before the next talk step (D425).
+- The draft lesson keeps the castle reveal through Next, asks you to toss the coin, then glows your home pads, the enemy's and the contested middle on a whole-board view (D425).
+- End turn tasks say "Hold End turn" while you have AP left and "Tap End turn" when you have none. Lesson 1 explains the hold (D425).
+- The Types lesson rings the Strong and Weak target chips; the Statuses lines point at the health bar (D425).
+- The lesson 4 task now reads "Down the Healer: keep attacking it." and fits on one line on desktop (D426).
+
+**Test on the phone**
+- The minimize strip in each lesson, upright and sideways: it tucks on the first tap outside, the minimize button works, it reopens for the next task, and "new tip" pulses before a talk step.
+- Lesson 7 (draft): the coin task, then the three pad-zone lines on the whole board.
+- Does the selected unit's yellow outline still crawl (open question 49)?
+
 ## 0.4.1-alpha — Nov 11, 2026
 Branch `build/v0.4.1-alpha-tutorial-mobile-pass` · stamp `0.4.1-alpha+f985646b` · data 30.9 MB
 
